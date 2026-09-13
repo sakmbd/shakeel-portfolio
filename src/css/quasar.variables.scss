@@ -1,0 +1,65 @@
+// Quasar Sass (& SCSS) Variables
+// --------------------------------------------------
+// Palette concept: a single premium "profile document" card (white) floating
+// on a cool near-white page background, deep charcoal/navy text, one
+// sophisticated teal accent used intentionally (CTAs, links, markers, labels).
+
+// Quasar semantic colors
+$primary: #0f766e; // teal — brand, buttons, markers, active states
+$secondary: #64748b;
+$accent: #0f766e;
+
+$dark: #111827;
+$dark-page: #111827;
+
+$positive: #21ba45;
+$negative: #b3261e;
+$info: #0f766e;
+$warning: #b45309;
+
+// Custom design tokens (available across .scss/.vue files)
+
+// Text — two decisive tones (no soft/washed-out middle gray): $color-ink for
+// names, headings AND body copy (kept dark for confident contrast rather than
+// a lighter "editorial" gray), $color-muted only for true metadata (dates,
+// labels, footer copyright). $color-accent is AA-safe as both text-on-white
+// and white-on-accent (~5.5:1 either direction) so no separate text variant
+// is needed this time.
+$color-ink: #111827; // primary text — headings AND body
+$color-muted: #64748b; // secondary/meta text — verified ~4.8:1 on white
+$color-accent: #0f766e; // verified ~5.5:1 on white (both directions)
+$color-accent-hover: #0b5a54; // manually darkened ~15% (avoids the deprecated Sass darken())
+$color-accent-soft: rgba(15, 118, 110, 0.08);
+
+// Surfaces
+$color-page-bg: #f7f8fa; // cool near-white — sits behind the profile card, header, footer
+$color-surface: #ffffff; // the profile card and all content surfaces
+$color-surface-tint: #eff6f5; // subtle cool-teal tint for the hero identity band only
+$color-border: rgba(17, 24, 39, 0.08);
+$color-border-strong: rgba(17, 24, 39, 0.16);
+
+// Elevation
+$shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06), 0 1px 1px rgba(17, 24, 39, 0.04);
+$shadow-md: 0 20px 40px rgba(17, 24, 39, 0.1), 0 4px 12px rgba(17, 24, 39, 0.06);
+
+// Radii
+$radius-sm: 8px;
+$radius-md: 14px;
+$radius-lg: 20px;
+
+// Typography — Fraunces (self-hosted, 2 static weights, ~20KB WOFF2 each,
+// latin subset only) for identity/display moments, system sans for UI/body
+// (zero extra cost), mono used sparingly as a technical accent (dates,
+// tech-tag labels only).
+$font-serif:
+  'Fraunces', ui-serif, Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
+$font-sans:
+  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-mono:
+  ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+// The whole site reads as one bounded "profile document" card floating on
+// the page background — wide enough to feel substantial on desktop while
+// keeping prose measures readable (see $prose-max-width, applied per-section).
+$card-max-width: 1240px;
+$prose-max-width: 700px;
