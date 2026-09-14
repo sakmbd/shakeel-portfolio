@@ -30,19 +30,7 @@ import SectionHeading from '@/components/ui/SectionHeading.vue';
 }
 
 .highlights__inner {
-  padding: 44px 48px;
-}
-
-@media (min-width: 1024px) {
-  .highlights__inner {
-    padding: 56px 64px;
-  }
-}
-
-@media (max-width: 599px) {
-  .highlights__inner {
-    padding: 36px 24px;
-  }
+  padding: 0px 48px 44px;
 }
 
 .highlights__grid {

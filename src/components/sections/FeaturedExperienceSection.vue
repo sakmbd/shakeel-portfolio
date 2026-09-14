@@ -19,7 +19,9 @@
             <h3 class="featured__title">{{ entry.title }}</h3>
             <span v-if="entry.featured" class="featured__badge">Featured</span>
           </div>
-          <p class="featured__context">{{ entry.domain }} &middot; {{ entry.employer }} &middot; {{ entry.duration }}</p>
+          <p class="featured__context">
+            {{ entry.domain }} &middot; {{ entry.employer }} &middot; {{ entry.duration }}
+          </p>
 
           <div class="featured__body">
             <ul class="featured__bullets">

@@ -73,23 +73,63 @@ function handleOutsideClick(e: MouseEvent) {
 
 let observer: IntersectionObserver | null = null;
 
+// Clicking (or keyboard-activating) a nav link jumps the scroll position in
+// one step, so resolve the active item immediately from the resulting hash
+// rather than waiting on the observer to notice.
+function handleHashChange() {
+  const match = navItems.find((item) => item.href === window.location.hash);
+  if (match) {
+    activeSection.value = match.href;
+  }
+}
+
 onMounted(() => {
   document.addEventListener('keydown', handleKeydown);
   document.addEventListener('click', handleOutsideClick);
+  window.addEventListener('hashchange', handleHashChange);
 
   const sections = navItems
     .map((item) => document.getElementById(item.href.slice(1)))
     .filter((el): el is HTMLElement => el !== null);
 
   if (sections.length > 0 && 'IntersectionObserver' in window) {
+    // The callback's own `entries` argument only lists the sections whose
+    // intersection state changed in this particular batch, not every
+    // currently-tracked one, so it isn't enough on its own to decide the
+    // active item — e.g. scrolling from Experience back up through
+    // Highlights/Featured Experience (neither of which is a tracked nav
+    // target) shouldn't leave "Experience" highlighted just because it was
+    // the last tracked element to report a change. Each callback is only a
+    // "the scroll position moved, re-check everything" trigger; the actual
+    // verdict is recomputed from scratch every time using a plain
+    // scrollspy rule: of the tracked sections whose top has scrolled up to
+    // (or above) the trigger line, the LAST one in page order is active.
+    // This also covers the final section on its own: Experience is tall
+    // enough that it can still be "the last one reached" even once Contact
+    // is fully in view, so once Contact's own top also crosses the trigger
+    // line — which it always eventually will, however short it is — it
+    // naturally wins by being later in page order, no separate "reached
+    // the bottom of the page" special case required.
+    const triggerLine = () => window.innerHeight * 0.55;
+
     observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting);
-        if (visible.length > 0) {
-          activeSection.value = `#${visible[0]!.target.id}`;
+      () => {
+        const line = triggerLine();
+        let current: string | null = null;
+        for (const item of navItems) {
+          const el = document.getElementById(item.href.slice(1));
+          if (el && el.getBoundingClientRect().top < line) {
+            current = item.href;
+          }
+        }
+        if (current) {
+          activeSection.value = current;
         }
       },
-      { rootMargin: '-84px 0px -70% 0px', threshold: 0 },
+      // threshold:0 with this rootMargin just needs to fire whenever any
+      // tracked section's boundary crosses roughly the same trigger line —
+      // the callback recomputes the real verdict itself above.
+      { rootMargin: '-84px 0px -45% 0px', threshold: 0 },
     );
     sections.forEach((el) => observer!.observe(el));
   }
@@ -98,6 +138,7 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown);
   document.removeEventListener('click', handleOutsideClick);
+  window.removeEventListener('hashchange', handleHashChange);
   observer?.disconnect();
 });
 </script>

@@ -182,9 +182,7 @@ const identity = resume.identity;
 
 .about__paragraph--lead {
   font-size: 1.25rem;
-  font-weight: 500;
   line-height: 1.65;
-  color: $color-ink;
 }
 
 .about__paragraph--closing {
