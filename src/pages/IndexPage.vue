@@ -6,6 +6,7 @@
     <EngineeringHighlightsSection />
     <FeaturedExperienceSection />
     <ExperienceTimelineSection />
+    <EducationSection />
     <ContactSection />
   </div>
 </template>
@@ -19,6 +20,7 @@ import SkillsSection from '@/components/sections/SkillsSection.vue';
 import EngineeringHighlightsSection from '@/components/sections/EngineeringHighlightsSection.vue';
 import FeaturedExperienceSection from '@/components/sections/FeaturedExperienceSection.vue';
 import ExperienceTimelineSection from '@/components/sections/ExperienceTimelineSection.vue';
+import EducationSection from '@/components/sections/EducationSection.vue';
 import ContactSection from '@/components/sections/ContactSection.vue';
 
 // Full title template, OG/Twitter, and JSON-LD land in the SEO phase.
