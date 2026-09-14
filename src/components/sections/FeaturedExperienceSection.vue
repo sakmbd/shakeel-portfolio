@@ -192,4 +192,20 @@ import SectionHeading from '@/components/ui/SectionHeading.vue';
     margin-top: 0;
   }
 }
+
+@media (max-width: 599px) {
+  .featured__card {
+    padding: 20px;
+  }
+
+  .featured__card--lead {
+    padding: 22px 20px;
+  }
+
+  .featured__bullets li {
+    text-align: justify;
+    text-align-last: left;
+    hyphens: auto;
+  }
+}
 </style>

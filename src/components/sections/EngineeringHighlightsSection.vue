@@ -33,6 +33,12 @@ import SectionHeading from '@/components/ui/SectionHeading.vue';
   padding: 0px 48px 44px;
 }
 
+@media (max-width: 599px) {
+  .highlights__inner {
+    padding: 0 24px 36px;
+  }
+}
+
 .highlights__grid {
   list-style: none;
   margin: 0;
@@ -94,5 +100,13 @@ import SectionHeading from '@/components/ui/SectionHeading.vue';
   font-size: 0.75rem;
   letter-spacing: 0.02em;
   color: $color-muted;
+}
+
+@media (max-width: 599px) {
+  .highlights__description {
+    text-align: justify;
+    text-align-last: left;
+    hyphens: auto;
+  }
 }
 </style>

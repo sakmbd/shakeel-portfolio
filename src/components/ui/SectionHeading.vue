@@ -57,4 +57,17 @@ withDefaults(
   line-height: 1.6;
   font-size: 1rem;
 }
+
+// The base clamp's min bound doesn't yield to the preferred vw value at
+// phone widths, so two-word titles ("Engineering Highlights", "Work
+// experience") sat flat at a size wide enough to force an avoidable wrap.
+// Scale down further here (plus a touch more letter-spacing) so they have
+// a real chance to stay on one line; unaffected above 599px, so desktop
+// heading sizes are untouched.
+@media (max-width: 599px) {
+  .section-heading__title {
+    font-size: clamp(1.5rem, 6.7vw, 2rem);
+    letter-spacing: -0.02em;
+  }
+}
 </style>

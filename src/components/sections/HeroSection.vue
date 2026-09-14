@@ -188,10 +188,20 @@ const identity = resume.identity;
     padding: 40px 24px 32px;
   }
 
+  // The base clamp's min bound (2.75rem) doesn't yield to the preferred 6vw
+  // value until ~733px, so on phones it sits at a flat, oversized floor that
+  // forces an unnecessarily large wrap. Scale it down further here so the
+  // name fits comfortably at narrow widths; unaffected above 599px, so
+  // desktop rendering (driven by the base clamp) is untouched.
+  .hero__name {
+    font-size: clamp(2.1rem, 10vw, 2.75rem);
+  }
+
   .hero__social {
     padding-inline-start: 0;
     border-inline-start: none;
     width: 100%;
+    justify-content: center;
   }
 }
 </style>

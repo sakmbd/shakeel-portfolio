@@ -261,6 +261,17 @@ const durationLabel = computed(() => calculateDurationLabel(props.entry.duration
 }
 
 @media (max-width: 599px) {
+  // Drop the rail column entirely so the card claims the full mobile width
+  // instead of being indented to make room for it. Desktop's two-column
+  // grid (rail + card) is untouched above this breakpoint.
+  .timeline-item {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-item__rail {
+    display: none;
+  }
+
   .timeline-item__trigger {
     padding: 18px 44px 18px 16px;
   }

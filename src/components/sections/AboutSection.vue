@@ -38,19 +38,40 @@
         <SectionHeading title="About" heading-id="about-heading" />
 
         <p class="about__paragraph about__paragraph--lead">{{ resume.summary[0] }}</p>
-        <p class="about__paragraph">{{ resume.summary[1] }}</p>
-        <p class="about__paragraph">{{ resume.summary[2] }}</p>
-        <p class="about__paragraph about__paragraph--closing">{{ resume.summary[3] }}</p>
+
+        <div class="about__more" :class="{ 'is-open': readMoreOpen }">
+          <div id="about-more-content" class="about__more-inner">
+            <p class="about__paragraph">{{ resume.summary[1] }}</p>
+            <p class="about__paragraph">{{ resume.summary[2] }}</p>
+            <p class="about__paragraph about__paragraph--closing">{{ resume.summary[3] }}</p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="about__toggle"
+          :aria-expanded="readMoreOpen"
+          aria-controls="about-more-content"
+          @click="readMoreOpen = !readMoreOpen"
+        >
+          {{ readMoreOpen ? 'Read less' : 'Read more' }}
+        </button>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { resume } from '@/data/resume';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
 
 const identity = resume.identity;
+
+// Mobile-only "Read more" collapse — see .about__more's min-width:700px
+// override, which forces the content fully open (and hides the toggle)
+// regardless of this state, so desktop always shows the full paragraphs.
+const readMoreOpen = ref(false);
 </script>
 
 <style lang="scss" scoped>
@@ -71,6 +92,12 @@ const identity = resume.identity;
   }
 }
 
+@media (max-width: 599px) {
+  .about__inner {
+    padding: 36px 24px;
+  }
+}
+
 // The photo and metadata share one continuous accent spine, so they read as
 // a single "identity rail" instead of a photo card sitting above a separate
 // info card.
@@ -86,6 +113,21 @@ const identity = resume.identity;
   .about__profile {
     gap: 26px;
     padding-left: 24px;
+  }
+}
+
+// Below the two-column breakpoint, the rail reads as pushing the stacked
+// photo/meta block toward the right instead of centering it — drop it (and
+// its connecting tag) so the block sits flush and balanced. Untouched at
+// 700px+, where the rail is the intentional "identity spine" treatment.
+@media (max-width: 699px) {
+  .about__profile {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .about__portrait-tag {
+    display: none;
   }
 }
 
@@ -148,6 +190,16 @@ const identity = resume.identity;
   }
 }
 
+// Below ~375px the label+value pair can outgrow the available width; let it
+// wrap onto a second line there instead of clipping against .profile-card's
+// overflow: hidden.
+@media (max-width: 374px) {
+  .about__meta-row {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+}
+
 .about__meta-label {
   flex-shrink: 0;
   font-weight: 700;
@@ -195,6 +247,67 @@ const identity = resume.identity;
   color: $color-ink-secondary;
   text-align: left;
   hyphens: none;
+}
+
+// Mobile-only progressive disclosure: collapsed by default (grid-rows 0fr),
+// expanding via the .is-open class the "Read more" button toggles. Reuses
+// the same grid-template-rows collapse technique as the mobile nav panel
+// and timeline accordion panels elsewhere in the site.
+.about__more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+
+  &.is-open {
+    grid-template-rows: 1fr;
+  }
+}
+
+.about__more-inner {
+  overflow: hidden;
+}
+
+.about__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 4px 0;
+  background: none;
+  border: none;
+  font-family: $font-sans;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: $color-accent-text;
+  cursor: pointer;
+
+  &:hover {
+    color: $color-accent-hover;
+  }
+}
+
+// Desktop (and About's own two-column breakpoint) always shows the full
+// content: collapsing the wrapper's own box via display: contents makes the
+// grid-rows collapse a no-op regardless of .is-open, and the toggle is
+// hidden — so there's no "Read more" control and nothing to expand.
+@media (min-width: 700px) {
+  .about__more {
+    display: contents;
+  }
+
+  .about__toggle {
+    display: none;
+  }
+}
+
+// Tighter line-height for the stacked mobile layout so the section feels
+// less vertically stretched. Desktop line-heights (set above) are untouched.
+@media (max-width: 699px) {
+  .about__paragraph,
+  .about__paragraph--lead,
+  .about__paragraph--closing {
+    line-height: 1.5;
+  }
 }
 
 @media (min-width: 700px) {

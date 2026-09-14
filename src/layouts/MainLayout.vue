@@ -58,7 +58,8 @@ main {
 
 .site-footer__links {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 12px 20px;
 
   a {
     font-size: 13px;
@@ -68,6 +69,12 @@ main {
     &:hover {
       color: $color-accent-text;
     }
+  }
+}
+
+@media (max-width: 599px) {
+  .site-footer__inner {
+    padding: 20px 24px 32px;
   }
 }
 </style>

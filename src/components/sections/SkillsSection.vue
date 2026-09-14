@@ -189,14 +189,6 @@ $sk-num: #c7c2bb;
   margin-bottom: 40px;
 }
 
-@media (max-width: 599px) {
-  .skills__core-strip {
-    border-radius: 20px;
-    padding: 18px 20px;
-    column-gap: 14px;
-  }
-}
-
 .skills__core-item {
   font-family: $font-sans;
   font-size: 1rem;
@@ -372,12 +364,55 @@ $sk-num: #c7c2bb;
     padding: 36px 0;
   }
 
+  // The base clamp's min bound doesn't yield to the preferred vw value at
+  // phone widths, so "Technology Stack" sat flat at a size wide enough to
+  // wrap. Scale it down further here; unaffected above 599px.
   .skills__title {
+    font-size: clamp(1.5rem, 6.7vw, 2rem);
     margin-bottom: 18px;
+  }
+
+  .skills__lede {
+    text-align: justify;
+    text-align-last: left;
+    hyphens: auto;
+  }
+
+  // Free-flowing dot-separated text reads unevenly once it wraps across
+  // several lines at phone width — a fixed 2-column grid of chips gives
+  // every item a predictable cell instead of an uncontrolled line break.
+  // Desktop keeps the plain dot-separated strip untouched.
+  .skills__core-strip {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: stretch;
+    gap: 10px;
+    border-radius: 20px;
+    padding: 18px 20px;
+  }
+
+  .skills__core-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px 12px;
+    background: $sk-chip-bg;
+    border: 1px solid $sk-chip-border;
+    border-radius: 12px;
+  }
+
+  .skills__core-dot {
+    display: none;
   }
 
   .skills__card {
     padding: 20px;
+  }
+
+  // Decorative-only; desktop keeps it as the grid's closing tile.
+  .skills__quote {
+    display: none;
   }
 }
 </style>
