@@ -102,7 +102,7 @@ body {
 
   &:hover {
     border-color: $color-accent;
-    color: $color-accent;
+    color: $color-accent-text;
     background: $color-accent-soft;
   }
 }
@@ -117,7 +117,7 @@ body {
   &:hover {
     border-color: $color-hero-accent;
     color: $color-hero-accent;
-    background: rgba(45, 212, 191, 0.1);
+    background: rgba(255, 92, 51, 0.12);
   }
 }
 
@@ -134,7 +134,7 @@ body {
 }
 
 a {
-  color: $color-accent;
+  color: $color-accent-text;
 }
 
 ::selection {

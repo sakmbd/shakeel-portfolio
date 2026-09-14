@@ -100,7 +100,7 @@ async function copyEmail() {
     font-size: 0.9375rem;
 
     &:hover {
-      color: $color-accent;
+      color: $color-accent-text;
     }
   }
 }

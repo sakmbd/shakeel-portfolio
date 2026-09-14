@@ -21,6 +21,9 @@ export interface ExperienceEntry {
   duration: string;
   technologies: string[];
   achievements: string[];
+  // True only when the source of truth explicitly identifies this as the
+  // active/ongoing role. Never inferred from recency or list position.
+  current?: boolean;
 }
 
 export interface EducationEntry {

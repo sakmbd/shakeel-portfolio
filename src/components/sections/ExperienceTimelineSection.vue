@@ -14,8 +14,7 @@
           :key="entry.employer"
           :entry="entry"
           :index="index"
-          :current="index === 0"
-          :default-open="index === 0"
+          :current="entry.current === true"
         />
       </ol>
     </div>

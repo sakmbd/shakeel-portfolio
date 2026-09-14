@@ -85,7 +85,7 @@ export const resume: ResumeData = {
 
   experience: [
     {
-      employer: 'Encora Digital India Pvt Ltd',
+      employer: 'Encora Inc.',
       role: 'Senior Software Engineer',
       duration: 'Dec 2021 – Apr 2026',
       technologies: [
@@ -117,7 +117,7 @@ export const resume: ResumeData = {
     },
     {
       employer: 'Lumen Technologies Ltd.',
-      role: 'Full Stack Developer',
+      role: 'Software Development Consultant I',
       duration: 'Apr 2020 – Dec 2021',
       technologies: ['Node.js', 'React.js', 'Itential Automation', 'MongoDB', 'Swagger API'],
       achievements: [
@@ -128,7 +128,7 @@ export const resume: ResumeData = {
     },
     {
       employer: 'Chetu India Pvt. Ltd.',
-      role: 'Full Stack Developer',
+      role: 'Sr. Software Engineer',
       duration: 'Jul 2017 – Apr 2020',
       technologies: [
         'Node.js',
@@ -150,7 +150,7 @@ export const resume: ResumeData = {
     },
     {
       employer: 'NetCreativeMind Pvt. Ltd.',
-      role: 'Full Stack Developer',
+      role: 'PHP Developer',
       duration: 'Feb 2016 – Jan 2017',
       technologies: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'Ajax', 'PHP', 'MySQL'],
       achievements: [
@@ -161,7 +161,7 @@ export const resume: ResumeData = {
     },
     {
       employer: 'Cyclonewebz Pvt. Ltd.',
-      role: 'Junior PHP Developer',
+      role: 'PHP Developer',
       duration: 'Feb 2015 – Feb 2016',
       technologies: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'Ajax', 'PHP', 'MySQL'],
       achievements: [

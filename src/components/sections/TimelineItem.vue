@@ -17,7 +17,9 @@
           <span v-if="current" class="timeline-item__badge">Current</span>
         </div>
         <p class="timeline-item__employer">{{ entry.employer }}</p>
-        <p class="timeline-item__duration">{{ entry.duration }}</p>
+        <p class="timeline-item__duration">
+          {{ entry.duration }}<span v-if="durationLabel"> &middot; {{ durationLabel }}</span>
+        </p>
 
         <span class="timeline-item__chevron" :class="{ 'is-open': open }" aria-hidden="true">
           <q-icon name="expand_more" size="22px" />
@@ -42,6 +44,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import type { ExperienceEntry } from '@/types/resume';
+import { calculateDurationLabel } from '@/utils/duration';
 
 const props = withDefaults(
   defineProps<{
@@ -55,6 +58,7 @@ const props = withDefaults(
 
 const open = ref(props.defaultOpen);
 const panelId = computed(() => `timeline-panel-${props.index}`);
+const durationLabel = computed(() => calculateDurationLabel(props.entry.duration));
 </script>
 
 <style lang="scss" scoped>
@@ -170,7 +174,7 @@ const panelId = computed(() => `timeline-panel-${props.index}`);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: $color-accent;
+  color: $color-accent-text;
   background: $color-accent-soft;
   border-radius: 999px;
   padding: 3px 10px;

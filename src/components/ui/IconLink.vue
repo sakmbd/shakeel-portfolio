@@ -54,7 +54,7 @@ withDefaults(
   &:hover {
     color: $color-hero-accent;
     border-color: $color-hero-accent;
-    background: rgba(45, 212, 191, 0.1);
+    background: rgba(255, 92, 51, 0.12);
   }
 }
 

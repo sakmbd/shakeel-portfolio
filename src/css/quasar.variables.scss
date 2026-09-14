@@ -5,16 +5,16 @@
 // strong first impression. One teal accent, used intentionally.
 
 // Quasar semantic colors
-$primary: #0f766e; // teal — brand, buttons, markers, active states
+$primary: #ff5c33; // coral/orange — brand, buttons, markers, active states
 $secondary: #5b6472;
-$accent: #0f766e;
+$accent: #ff5c33;
 
 $dark: #0f172a;
 $dark-page: #0f172a;
 
 $positive: #21ba45;
 $negative: #b3261e;
-$info: #0f766e;
+$info: #ff5c33;
 $warning: #b45309;
 
 // Custom design tokens (available across .scss/.vue files)
@@ -26,9 +26,14 @@ $color-ink: #111827; // primary text
 $color-ink-secondary: #5b6472; // secondary text
 $color-muted: #7c8796; // metadata only — verified ~4.5:1 on white, large/UI use only below that
 
-$color-accent: #0f766e; // verified ~5.5:1 on white (both directions)
-$color-accent-hover: #115e59;
-$color-accent-soft: rgba(15, 118, 110, 0.08);
+$color-accent: #ff5c33; // vivid brand coral — buttons, borders, markers, decorative
+// details, icons, and large/bold text (~3.1:1 on white — large-text/non-text
+// UI only). Never use for normal-size text on white; use $color-accent-text.
+$color-accent-hover: #e2491d;
+$color-accent-soft: rgba(255, 92, 51, 0.08);
+$color-accent-text: #c2410c; // darkened, AA-safe (~5.2:1 on white) variant of
+// $color-accent for normal-size accent-colored text/links on light surfaces
+// (eyebrows, hover links, badges) — $color-accent itself is too light for that.
 
 // Surfaces
 $color-page-bg: #f4f6f8; // cool near-white — sits behind the profile card, header, footer
@@ -42,13 +47,13 @@ $color-hero-bg: #0f172a;
 $color-hero-ink: #f8fafc; // primary text on navy — verified ~15.5:1
 $color-hero-ink-secondary: #cbd5e1; // secondary text on navy — verified ~10.8:1
 $color-hero-border: rgba(248, 250, 252, 0.14);
-$color-hero-accent: #2dd4bf; // brighter teal for AA contrast against navy (~8.9:1)
+$color-hero-accent: #ff5c33; // same brand coral already clears AA on navy (~5.8:1)
 
 // Elevation
 $shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06), 0 1px 1px rgba(17, 24, 39, 0.04);
 $shadow-md: 0 20px 40px rgba(17, 24, 39, 0.1), 0 4px 12px rgba(17, 24, 39, 0.06);
-$shadow-btn: 0 1px 2px rgba(15, 118, 110, 0.15), 0 2px 6px rgba(15, 118, 110, 0.12);
-$shadow-btn-hover: 0 4px 10px rgba(15, 118, 110, 0.22), 0 2px 4px rgba(15, 118, 110, 0.14);
+$shadow-btn: 0 1px 2px rgba(255, 92, 51, 0.15), 0 2px 6px rgba(255, 92, 51, 0.12);
+$shadow-btn-hover: 0 4px 10px rgba(255, 92, 51, 0.22), 0 2px 4px rgba(255, 92, 51, 0.14);
 
 // Radii
 $radius-sm: 10px;

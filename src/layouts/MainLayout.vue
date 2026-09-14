@@ -66,7 +66,7 @@ main {
     text-decoration: none;
 
     &:hover {
-      color: $color-accent;
+      color: $color-accent-text;
     }
   }
 }
