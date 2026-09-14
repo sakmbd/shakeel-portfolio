@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://shakeel-portfolio.example/sitemap.xml
+Sitemap: https://shakeeldev.com/sitemap.xml

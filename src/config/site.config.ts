@@ -6,15 +6,15 @@
 
 export const siteConfig = {
   /**
-   * TODO: replace with the real production domain before deploying.
-   * Used for canonical URLs, Open Graph/Twitter "url" fields, and JSON-LD.
+   * Real production domain. Used for canonical URLs, Open Graph/Twitter
+   * "url" fields, and JSON-LD.
    *
    * public/robots.txt and public/sitemap.xml are plain static files (not
    * templated at build time) and hard-code this same domain in their
-   * Sitemap:/<loc> entries — update BOTH of those alongside this value
-   * whenever the real domain is known, so all three stay in sync.
+   * Sitemap:/<loc> entries — update BOTH of those alongside this value if
+   * the domain ever changes, so all three stay in sync.
    */
-  siteUrl: 'https://shakeel-portfolio.example',
+  siteUrl: 'https://shakeeldev.com',
 
   siteName: 'Shakeel Ahamed — Senior Software Engineer',
 
