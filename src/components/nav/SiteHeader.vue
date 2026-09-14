@@ -1,7 +1,9 @@
 <template>
   <header ref="headerEl" class="site-header">
     <div class="site-header__inner">
-      <a class="site-header__brand" href="#top">{{ identity.name }}</a>
+      <a class="site-header__brand" href="#top" @click="onNavClick($event, '#top')">{{
+        identity.name
+      }}</a>
 
       <nav class="site-nav site-nav--desktop" aria-label="Primary">
         <a
@@ -10,6 +12,7 @@
           :href="item.href"
           :class="{ 'is-active': activeSection === item.href }"
           :aria-current="activeSection === item.href ? 'location' : undefined"
+          @click="onNavClick($event, item.href)"
         >
           {{ item.label }}
         </a>
@@ -37,7 +40,12 @@
       :inert="!mobileOpen"
     >
       <nav aria-label="Primary">
-        <a v-for="item in navItems" :key="item.href" :href="item.href" @click="mobileOpen = false">
+        <a
+          v-for="item in navItems"
+          :key="item.href"
+          :href="item.href"
+          @click="onMobileNavClick($event, item.href)"
+        >
           {{ item.label }}
         </a>
       </nav>
@@ -48,6 +56,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import { resume } from '@/data/resume';
+import { scrollToSection } from '@/utils/scrollToSection';
 
 const identity = resume.identity;
 const mobileOpen = ref(false);
@@ -73,20 +82,26 @@ function handleOutsideClick(e: MouseEvent) {
 
 let observer: IntersectionObserver | null = null;
 
-// Clicking (or keyboard-activating) a nav link jumps the scroll position in
-// one step, so resolve the active item immediately from the resulting hash
-// rather than waiting on the observer to notice.
-function handleHashChange() {
-  const match = navItems.find((item) => item.href === window.location.hash);
-  if (match) {
-    activeSection.value = match.href;
-  }
+// Nav links keep their #section href for semantics/fallback, but clicks are
+// intercepted so the scroll happens via scrollIntoView instead of native
+// hash navigation — this keeps the address bar clean (history-mode routing
+// + SSG means a "#about" fragment would otherwise land in the URL). The
+// active item is set immediately here rather than waiting on the
+// IntersectionObserver to notice the jump.
+function onNavClick(e: MouseEvent, href: string) {
+  e.preventDefault();
+  scrollToSection(href.slice(1));
+  activeSection.value = href;
+}
+
+function onMobileNavClick(e: MouseEvent, href: string) {
+  onNavClick(e, href);
+  mobileOpen.value = false;
 }
 
 onMounted(() => {
   document.addEventListener('keydown', handleKeydown);
   document.addEventListener('click', handleOutsideClick);
-  window.addEventListener('hashchange', handleHashChange);
 
   const sections = navItems
     .map((item) => document.getElementById(item.href.slice(1)))
@@ -138,7 +153,6 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown);
   document.removeEventListener('click', handleOutsideClick);
-  window.removeEventListener('hashchange', handleHashChange);
   observer?.disconnect();
 });
 </script>

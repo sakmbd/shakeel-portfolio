@@ -20,7 +20,9 @@
       <div class="hero__bottom">
         <div class="hero__actions">
           <a class="btn btn--primary" :href="siteConfig.resumePdfPath" download>Download Resume</a>
-          <a class="btn btn--outline-dark" href="#contact">Contact Me</a>
+          <a class="btn btn--outline-dark" href="#contact" @click="onContactClick"
+            >Contact Me</a
+          >
         </div>
 
         <div class="hero__social" aria-label="Social and contact links">
@@ -47,11 +49,20 @@
 <script setup lang="ts">
 import { resume } from '@/data/resume';
 import { siteConfig } from '@/config/site.config';
+import { scrollToSection } from '@/utils/scrollToSection';
 import IconLink from '@/components/ui/IconLink.vue';
 import IconGitHub from '@/components/icons/IconGitHub.vue';
 import IconLinkedIn from '@/components/icons/IconLinkedIn.vue';
 
 const identity = resume.identity;
+
+// Kept as a real #contact href for semantics/fallback, but the click is
+// intercepted so the URL stays clean (history-mode routing + SSG means a
+// native hash jump would otherwise land "#contact" in the address bar).
+function onContactClick(e: MouseEvent) {
+  e.preventDefault();
+  scrollToSection('contact');
+}
 </script>
 
 <style lang="scss" scoped>

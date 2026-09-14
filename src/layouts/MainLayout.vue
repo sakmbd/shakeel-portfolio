@@ -1,5 +1,5 @@
 <template>
-  <a class="skip-link" href="#main-content">Skip to content</a>
+  <a class="skip-link" href="#main-content" @click="onSkipLinkClick">Skip to content</a>
 
   <SiteHeader />
 
@@ -27,6 +27,18 @@ import SiteHeader from '@/components/nav/SiteHeader.vue';
 
 const identity = resume.identity;
 const year = new Date().getFullYear();
+
+// Kept as a real #main-content href for semantics/fallback, but the click is
+// intercepted so the URL stays clean — the native anchor jump would
+// otherwise land "#main-content" in the address bar (history-mode routing
+// + SSG requires clean URLs). Focus is moved manually since preventDefault
+// skips the browser's default focus-the-target behavior.
+function onSkipLinkClick(e: MouseEvent) {
+  e.preventDefault();
+  const target = document.getElementById('main-content');
+  target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  target?.focus();
+}
 </script>
 
 <style lang="scss" scoped>
