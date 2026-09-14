@@ -1,16 +1,16 @@
 // Quasar Sass (& SCSS) Variables
 // --------------------------------------------------
-// Palette concept: a single premium "profile document" card (white) floating
-// on a cool near-white page background, deep charcoal/navy text, one
-// sophisticated teal accent used intentionally (CTAs, links, markers, labels).
+// Palette concept: a premium "profile document" card (white) floating on a
+// crisp cool-gray page, with a confident deep-navy hero surface as the
+// strong first impression. One teal accent, used intentionally.
 
 // Quasar semantic colors
 $primary: #0f766e; // teal — brand, buttons, markers, active states
-$secondary: #64748b;
+$secondary: #5b6472;
 $accent: #0f766e;
 
-$dark: #111827;
-$dark-page: #111827;
+$dark: #0f172a;
+$dark-page: #0f172a;
 
 $positive: #21ba45;
 $negative: #b3261e;
@@ -19,42 +19,50 @@ $warning: #b45309;
 
 // Custom design tokens (available across .scss/.vue files)
 
-// Text — two decisive tones (no soft/washed-out middle gray): $color-ink for
-// names, headings AND body copy (kept dark for confident contrast rather than
-// a lighter "editorial" gray), $color-muted only for true metadata (dates,
-// labels, footer copyright). $color-accent is AA-safe as both text-on-white
-// and white-on-accent (~5.5:1 either direction) so no separate text variant
-// is needed this time.
-$color-ink: #111827; // primary text — headings AND body
-$color-muted: #64748b; // secondary/meta text — verified ~4.8:1 on white
+// Text — three tones on light surfaces: primary (headings + body copy),
+// secondary (supporting copy, nav), muted (true metadata only: dates,
+// labels, footer copyright).
+$color-ink: #111827; // primary text
+$color-ink-secondary: #5b6472; // secondary text
+$color-muted: #7c8796; // metadata only — verified ~4.5:1 on white, large/UI use only below that
+
 $color-accent: #0f766e; // verified ~5.5:1 on white (both directions)
-$color-accent-hover: #0b5a54; // manually darkened ~15% (avoids the deprecated Sass darken())
+$color-accent-hover: #115e59;
 $color-accent-soft: rgba(15, 118, 110, 0.08);
 
 // Surfaces
-$color-page-bg: #f7f8fa; // cool near-white — sits behind the profile card, header, footer
+$color-page-bg: #f4f6f8; // cool near-white — sits behind the profile card, header, footer
 $color-surface: #ffffff; // the profile card and all content surfaces
-$color-surface-tint: #eff6f5; // subtle cool-teal tint for the hero identity band only
-$color-border: rgba(17, 24, 39, 0.08);
-$color-border-strong: rgba(17, 24, 39, 0.16);
+$color-surface-tint: #eff6f5; // subtle cool-teal tint (used sparingly, e.g. About meta panel)
+$color-border: #e2e8f0;
+$color-border-strong: #cbd5e1;
+
+// Hero — the one deliberately dark surface on the page. Light text on navy.
+$color-hero-bg: #0f172a;
+$color-hero-ink: #f8fafc; // primary text on navy — verified ~15.5:1
+$color-hero-ink-secondary: #cbd5e1; // secondary text on navy — verified ~10.8:1
+$color-hero-border: rgba(248, 250, 252, 0.14);
+$color-hero-accent: #2dd4bf; // brighter teal for AA contrast against navy (~8.9:1)
 
 // Elevation
 $shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06), 0 1px 1px rgba(17, 24, 39, 0.04);
 $shadow-md: 0 20px 40px rgba(17, 24, 39, 0.1), 0 4px 12px rgba(17, 24, 39, 0.06);
+$shadow-btn: 0 1px 2px rgba(15, 118, 110, 0.15), 0 2px 6px rgba(15, 118, 110, 0.12);
+$shadow-btn-hover: 0 4px 10px rgba(15, 118, 110, 0.22), 0 2px 4px rgba(15, 118, 110, 0.14);
 
 // Radii
-$radius-sm: 8px;
+$radius-sm: 10px;
 $radius-md: 14px;
 $radius-lg: 20px;
 
-// Typography — Fraunces (self-hosted, 2 static weights, ~20KB WOFF2 each,
-// latin subset only) for identity/display moments, system sans for UI/body
-// (zero extra cost), mono used sparingly as a technical accent (dates,
-// tech-tag labels only).
+// Typography — Fraunces (display serif, identity/headings) + Manrope (UI/body
+// sans, replaces the system stack for a noticeably more designed feel), mono
+// used sparingly as a technical accent (dates, tech-tag labels only).
 $font-serif:
   'Fraunces', ui-serif, Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
 $font-sans:
-  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+  sans-serif;
 $font-mono:
   ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
@@ -63,3 +71,9 @@ $font-mono:
 // keeping prose measures readable (see $prose-max-width, applied per-section).
 $card-max-width: 1240px;
 $prose-max-width: 700px;
+
+// About's photo/identity column + gap at the desktop (1024px+) breakpoint —
+// shared with HeroSection so the hero summary's max-width can be computed to
+// right-align with About's text column instead of duplicating magic numbers.
+$about-photo-col: 300px;
+$about-photo-gap: 64px;

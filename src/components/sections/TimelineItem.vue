@@ -178,7 +178,7 @@ const panelId = computed(() => `timeline-panel-${props.index}`);
 
 .timeline-item__employer {
   margin: 6px 0 0;
-  color: $color-ink;
+  color: $color-ink-secondary;
   font-weight: 600;
   font-size: 1.0625rem;
 }
@@ -221,8 +221,7 @@ const panelId = computed(() => `timeline-panel-${props.index}`);
 .timeline-item__achievements {
   margin: 0;
   padding: 4px 24px 22px 42px;
-  max-width: 760px;
-  color: $color-ink;
+  color: $color-ink-secondary;
   font-size: 1rem;
   line-height: 1.75;
 
@@ -249,7 +248,7 @@ const panelId = computed(() => `timeline-panel-${props.index}`);
   li {
     font-family: $font-mono;
     font-size: 0.75rem;
-    color: $color-ink;
+    color: $color-ink-secondary;
     background: $color-surface-tint;
     border: 1px solid $color-border;
     border-radius: 6px;

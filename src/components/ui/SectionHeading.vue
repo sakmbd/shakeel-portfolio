@@ -53,7 +53,7 @@ withDefaults(
 
 .section-heading__lede {
   margin: 10px 0 0;
-  color: $color-ink;
+  color: $color-ink-secondary;
   line-height: 1.6;
   font-size: 1rem;
 }

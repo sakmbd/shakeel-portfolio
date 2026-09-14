@@ -1,5 +1,11 @@
 <template>
-  <a :href="href" class="icon-link" :target="external ? '_blank' : undefined" :rel="external ? 'noopener noreferrer' : undefined">
+  <a
+    :href="href"
+    class="icon-link"
+    :class="`icon-link--${variant}`"
+    :target="external ? '_blank' : undefined"
+    :rel="external ? 'noopener noreferrer' : undefined"
+  >
     <span class="icon-link__glyph" aria-hidden="true">
       <slot />
     </span>
@@ -13,8 +19,9 @@ withDefaults(
     href: string;
     label: string;
     external?: boolean;
+    variant?: 'light' | 'dark';
   }>(),
-  { external: true },
+  { external: true, variant: 'light' },
 );
 </script>
 
@@ -23,8 +30,8 @@ withDefaults(
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border-radius: $radius-sm;
   border: 1px solid $color-border-strong;
   color: $color-ink;
@@ -37,6 +44,17 @@ withDefaults(
     color: $color-accent;
     border-color: $color-accent;
     background: $color-accent-soft;
+  }
+}
+
+.icon-link--dark {
+  border-color: $color-hero-border;
+  color: $color-hero-ink-secondary;
+
+  &:hover {
+    color: $color-hero-accent;
+    border-color: $color-hero-accent;
+    background: rgba(45, 212, 191, 0.1);
   }
 }
 

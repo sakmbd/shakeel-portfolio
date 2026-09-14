@@ -13,7 +13,7 @@ export const resume: ResumeData = {
     name: 'Shakeel Ahamed',
     title: 'Senior Software Engineer | Full Stack | Node.js | React.js | Vue.js | Microservices',
     location: 'India',
-    relocation: 'Open to relocate to Dubai, UAE',
+    relocation: 'Open to relocate',
     availability: 'Immediate Joiner',
     phone: '+91-9555909770',
     email: 'sakmbd@gmail.com',

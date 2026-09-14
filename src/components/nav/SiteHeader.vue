@@ -4,14 +4,18 @@
       <a class="site-header__brand" href="#top">{{ identity.name }}</a>
 
       <nav class="site-nav site-nav--desktop" aria-label="Primary">
-        <a v-for="item in navItems" :key="item.href" :href="item.href">{{ item.label }}</a>
+        <a
+          v-for="item in navItems"
+          :key="item.href"
+          :href="item.href"
+          :class="{ 'is-active': activeSection === item.href }"
+          :aria-current="activeSection === item.href ? 'location' : undefined"
+        >
+          {{ item.label }}
+        </a>
       </nav>
 
       <div class="site-header__actions">
-        <a class="btn btn--primary site-header__resume" :href="siteConfig.resumePdfPath" download
-          >Resume</a
-        >
-
         <button
           type="button"
           class="site-header__toggle"
@@ -36,7 +40,6 @@
         <a v-for="item in navItems" :key="item.href" :href="item.href" @click="mobileOpen = false">
           {{ item.label }}
         </a>
-        <a :href="siteConfig.resumePdfPath" download @click="mobileOpen = false">Resume</a>
       </nav>
     </div>
   </header>
@@ -45,11 +48,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import { resume } from '@/data/resume';
-import { siteConfig } from '@/config/site.config';
 
 const identity = resume.identity;
 const mobileOpen = ref(false);
 const headerEl = ref<HTMLElement | null>(null);
+const activeSection = ref<string | null>(null);
 
 const navItems = [
   { href: '#about', label: 'About' },
@@ -67,14 +70,34 @@ function handleOutsideClick(e: MouseEvent) {
   }
 }
 
+let observer: IntersectionObserver | null = null;
+
 onMounted(() => {
   document.addEventListener('keydown', handleKeydown);
   document.addEventListener('click', handleOutsideClick);
+
+  const sections = navItems
+    .map((item) => document.getElementById(item.href.slice(1)))
+    .filter((el): el is HTMLElement => el !== null);
+
+  if (sections.length > 0 && 'IntersectionObserver' in window) {
+    observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          activeSection.value = `#${visible[0]!.target.id}`;
+        }
+      },
+      { rootMargin: '-84px 0px -70% 0px', threshold: 0 },
+    );
+    sections.forEach((el) => observer!.observe(el));
+  }
 });
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown);
   document.removeEventListener('click', handleOutsideClick);
+  observer?.disconnect();
 });
 </script>
 
@@ -92,10 +115,10 @@ onUnmounted(() => {
   max-width: $card-max-width;
   width: calc(100% - 40px);
   margin: 0 auto;
-  padding: 14px 24px;
+  padding: 16px 24px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 28px;
 }
 
 .site-header__brand {
@@ -110,16 +133,42 @@ onUnmounted(() => {
 
 .site-nav--desktop {
   display: none;
-  gap: 28px;
+  gap: 32px;
 
   a {
-    color: $color-ink;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 32px;
+    color: $color-ink-secondary;
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
+    transition: color 0.15s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 4px;
+      height: 2px;
+      background: $color-accent;
+      border-radius: 1px;
+      transform: scaleX(0);
+      transition: transform 0.15s ease;
+    }
 
     &:hover {
-      color: $color-accent;
+      color: $color-ink;
+    }
+
+    &.is-active {
+      color: $color-ink;
+
+      &::after {
+        transform: scaleX(1);
+      }
     }
   }
 }
@@ -127,26 +176,25 @@ onUnmounted(() => {
 .site-header__actions {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.site-header__resume {
-  display: none;
-  padding: 9px 18px;
-  font-size: 14px;
+  gap: 12px;
 }
 
 .site-header__toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: $radius-sm;
   border: 1px solid $color-border-strong;
   background: transparent;
   color: $color-ink;
   cursor: pointer;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: $color-accent;
+  }
 }
 
 .site-nav--mobile {
@@ -188,10 +236,6 @@ onUnmounted(() => {
 @media (min-width: 768px) {
   .site-nav--desktop {
     display: flex;
-  }
-
-  .site-header__resume {
-    display: inline-flex;
   }
 
   .site-header__toggle {

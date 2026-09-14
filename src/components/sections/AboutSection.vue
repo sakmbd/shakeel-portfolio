@@ -72,11 +72,11 @@ const identity = resume.identity;
 
 .about__photo-panel {
   position: relative;
-  padding: 12px;
+  padding: 14px;
   background: $color-surface;
   border: 1px solid $color-border;
   border-radius: $radius-lg;
-  box-shadow: $shadow-sm;
+  box-shadow: $shadow-md;
 
   &::after {
     content: '';
@@ -125,7 +125,7 @@ const identity = resume.identity;
 }
 
 .about__paragraph {
-  color: $color-ink;
+  color: $color-ink-secondary;
   line-height: 1.7;
   font-size: 1.0625rem;
   max-width: $prose-max-width;
@@ -148,8 +148,16 @@ const identity = resume.identity;
 
 @media (min-width: 1024px) {
   .about__inner {
-    grid-template-columns: 300px 1fr;
-    gap: 64px;
+    grid-template-columns: $about-photo-col 1fr;
+    gap: $about-photo-gap;
+  }
+
+  // Narrower than the shared $about-photo-col track so the photo + info
+  // panel's combined height lines up with the About copy's bottom edge
+  // (the column itself stays full-width for HeroSection's alignment calc).
+  .about__photo-panel,
+  .about__meta {
+    width: 220px;
   }
 }
 </style>
