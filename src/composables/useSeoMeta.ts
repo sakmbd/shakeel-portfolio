@@ -67,7 +67,21 @@ export function useHomeSeoMeta() {
       ogDescription: { property: 'og:description', content: siteConfig.defaultDescription },
       ogUrl: { property: 'og:url', content: canonicalUrl },
       ogSiteName: { property: 'og:site_name', content: siteConfig.siteName },
-      ...(shareImageUrl ? { ogImage: { property: 'og:image', content: shareImageUrl } } : {}),
+      ...(shareImageUrl
+        ? {
+            ogImage: { property: 'og:image', content: shareImageUrl },
+            ogImageSecureUrl: { property: 'og:image:secure_url', content: shareImageUrl },
+            ogImageType: { property: 'og:image:type', content: siteConfig.ogImageType },
+            ogImageWidth: {
+              property: 'og:image:width',
+              content: String(siteConfig.ogImageWidth),
+            },
+            ogImageHeight: {
+              property: 'og:image:height',
+              content: String(siteConfig.ogImageHeight),
+            },
+          }
+        : {}),
 
       // No known @handle to attribute (twitter:site/twitter:creator), so
       // those are intentionally omitted rather than invented.

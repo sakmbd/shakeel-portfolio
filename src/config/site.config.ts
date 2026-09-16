@@ -26,6 +26,10 @@ export const siteConfig = {
 
   /** Dedicated Open Graph/Twitter social preview image (landscape). */
   ogImagePath: '/images/og-image.png',
+  /** Pixel dimensions and MIME type of the asset at ogImagePath, above. */
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogImageType: 'image/png',
 
   /** Canonical downloadable resume — pre-existing static asset, never generated. */
   resumePdfPath: '/resume.pdf',
