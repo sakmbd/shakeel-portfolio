@@ -80,6 +80,7 @@ export function useHomeSeoMeta() {
               property: 'og:image:height',
               content: String(siteConfig.ogImageHeight),
             },
+            ogImageAlt: { property: 'og:image:alt', content: siteConfig.ogImageAlt },
           }
         : {}),
 
@@ -90,7 +91,12 @@ export function useHomeSeoMeta() {
       twitterCard: { name: 'twitter:card', content: 'summary_large_image' },
       twitterTitle: { name: 'twitter:title', content: siteConfig.defaultTitle },
       twitterDescription: { name: 'twitter:description', content: siteConfig.defaultDescription },
-      ...(shareImageUrl ? { twitterImage: { name: 'twitter:image', content: shareImageUrl } } : {}),
+      ...(shareImageUrl
+        ? {
+            twitterImage: { name: 'twitter:image', content: shareImageUrl },
+            twitterImageAlt: { name: 'twitter:image:alt', content: siteConfig.ogImageAlt },
+          }
+        : {}),
     },
     link: {
       canonical: { rel: 'canonical', href: canonicalUrl },

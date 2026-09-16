@@ -18,9 +18,9 @@ export const siteConfig = {
 
   siteName: 'Shakeel Ahamed — Senior Software Engineer',
 
-  defaultTitle: 'Shakeel Ahamed | Senior Software Engineer & Full Stack Developer',
+  defaultTitle: 'Shakeel Ahamed | Senior Software Engineer & Full Stack Dev',
   defaultDescription:
-    'Shakeel Ahamed — Senior Software Engineer & Full Stack Developer. 10+ years building scalable web apps and microservices with Node.js, React.js, Vue.js, TypeScript. Open to relocating to Dubai.',
+    'Shakeel Ahamed — Senior Software Engineer & Full Stack Developer with 10+ years building scalable web apps using Node.js, React.js, Vue.js, and TypeScript.',
 
   locale: 'en',
 
@@ -30,6 +30,8 @@ export const siteConfig = {
   ogImageWidth: 1200,
   ogImageHeight: 630,
   ogImageType: 'image/png',
+  /** Alt text for the social preview image, shared by og:image:alt and twitter:image:alt. */
+  ogImageAlt: 'Shakeel Ahamed — Senior Software Engineer & Full Stack Developer',
 
   /** Canonical downloadable resume — pre-existing static asset, never generated. */
   resumePdfPath: '/resume.pdf',
