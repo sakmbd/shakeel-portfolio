@@ -1,20 +1,27 @@
 <template>
   <section id="highlights" class="highlights" aria-labelledby="highlights-heading">
-    <div class="highlights__inner">
+    <div class="section-inner">
       <SectionHeading
         title="Engineering Highlights"
         lede="Selected outcomes from real production systems across e-commerce, healthcare, and network automation."
         heading-id="highlights-heading"
+        compact
       />
 
-      <ul class="highlights__grid">
-        <li v-for="item in resume.highlights" :key="item.stat" class="highlights__tile">
-          <q-icon :name="item.icon" size="22px" />
-          <p class="highlights__stat">{{ item.stat }}</p>
-          <p class="highlights__description">{{ item.description }}</p>
-          <p class="highlights__employer">{{ item.employer }}</p>
-        </li>
-      </ul>
+      <AccordionSection
+        label="Explore Engineering Highlights"
+        :subtitle="`${resume.highlights.length} selected outcomes from production systems`"
+        panel-id="highlights-panel"
+      >
+        <ul class="highlights__grid">
+          <li v-for="item in resume.highlights" :key="item.stat" class="highlights__tile">
+            <q-icon :name="item.icon" size="22px" />
+            <p class="highlights__stat">{{ item.stat }}</p>
+            <p class="highlights__description">{{ item.description }}</p>
+            <p class="highlights__employer">{{ item.employer }}</p>
+          </li>
+        </ul>
+      </AccordionSection>
     </div>
   </section>
 </template>
@@ -22,6 +29,7 @@
 <script setup lang="ts">
 import { resume } from '@/data/resume';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
+import AccordionSection from '@/components/ui/AccordionSection.vue';
 </script>
 
 <style lang="scss" scoped>
@@ -29,15 +37,9 @@ import SectionHeading from '@/components/ui/SectionHeading.vue';
   border-bottom: 1px solid $color-border;
 }
 
-.highlights__inner {
-  padding: 0px 48px 44px;
-}
-
-@media (max-width: 599px) {
-  .highlights__inner {
-    padding: 0 24px 36px;
-  }
-}
+// Section-level padding lives in the shared .section-inner utility
+// (app.scss) — the inner div uses that class directly instead of a local
+// highlights__inner copy of the same values.
 
 .highlights__grid {
   list-style: none;

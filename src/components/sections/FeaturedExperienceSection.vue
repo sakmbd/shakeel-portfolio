@@ -1,46 +1,63 @@
 <template>
   <section id="featured-experience" class="featured" aria-labelledby="featured-heading">
-    <div class="featured__inner">
+    <div class="section-inner">
       <SectionHeading
         title="Featured Engineering Experience"
         lede="A closer look at four of the more technically interesting problems from the timeline below."
         heading-id="featured-heading"
+        compact
       />
 
-      <div class="featured__layout">
-        <article
-          v-for="entry in resume.featuredExperience"
-          :id="entry.slug"
-          :key="entry.slug"
-          class="featured__card"
-          :class="{ 'featured__card--lead': entry.featured }"
-        >
-          <div class="featured__card-head">
-            <h3 class="featured__title">{{ entry.title }}</h3>
-            <span v-if="entry.featured" class="featured__badge">Featured</span>
-          </div>
-          <p class="featured__context">
-            {{ entry.domain }} &middot; {{ entry.employer }} &middot; {{ entry.duration }}
-          </p>
+      <AccordionSection
+        :label="accordionLabel"
+        :subtitle="accordionSubtitle"
+        panel-id="featured-experience-panel"
+      >
+        <div class="featured__layout">
+          <article
+            v-for="entry in resume.featuredExperience"
+            :id="entry.slug"
+            :key="entry.slug"
+            class="featured__card"
+            :class="{ 'featured__card--lead': entry.featured }"
+          >
+            <div class="featured__card-head">
+              <h3 class="featured__title">{{ entry.title }}</h3>
+              <span v-if="entry.featured" class="featured__badge">Featured</span>
+            </div>
+            <p class="featured__context">
+              {{ entry.domain }} &middot; {{ entry.employer }} &middot; {{ entry.duration }}
+            </p>
 
-          <div class="featured__body">
-            <ul class="featured__bullets">
-              <li v-for="(point, i) in entry.highlights" :key="i">{{ point }}</li>
-            </ul>
+            <div class="featured__body">
+              <ul class="featured__bullets">
+                <li v-for="(point, i) in entry.highlights" :key="i">{{ point }}</li>
+              </ul>
 
-            <ul class="featured__tech" aria-label="Technologies used">
-              <li v-for="tech in entry.technologies" :key="tech">{{ tech }}</li>
-            </ul>
-          </div>
-        </article>
-      </div>
+              <ul class="featured__tech" aria-label="Technologies used">
+                <li v-for="tech in entry.technologies" :key="tech">{{ tech }}</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </AccordionSection>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { resume } from '@/data/resume';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
+import AccordionSection from '@/components/ui/AccordionSection.vue';
+
+const accordionLabel = computed(
+  () =>
+    `${String(resume.featuredExperience.length).padStart(2, '0')} Engineering Case Studies`,
+);
+const accordionSubtitle = computed(() =>
+  resume.featuredExperience.map((entry) => entry.title).join(' • '),
+);
 </script>
 
 <style lang="scss" scoped>
@@ -48,21 +65,9 @@ import SectionHeading from '@/components/ui/SectionHeading.vue';
   border-bottom: 1px solid $color-border;
 }
 
-.featured__inner {
-  padding: 44px 48px;
-}
-
-@media (min-width: 1024px) {
-  .featured__inner {
-    padding: 56px 64px;
-  }
-}
-
-@media (max-width: 599px) {
-  .featured__inner {
-    padding: 36px 24px;
-  }
-}
+// Section-level padding lives in the shared .section-inner utility
+// (app.scss) — the inner div uses that class directly instead of a local
+// featured__inner copy of the same values.
 
 .featured__layout {
   display: grid;

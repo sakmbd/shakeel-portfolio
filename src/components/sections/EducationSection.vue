@@ -1,6 +1,6 @@
 <template>
   <section id="education" class="education" aria-labelledby="education-heading">
-    <div class="education__inner">
+    <div class="section-inner">
       <SectionHeading
         title="Education"
         lede="Academic background and qualifications."
@@ -32,26 +32,14 @@ import SectionHeading from '@/components/ui/SectionHeading.vue';
   border-bottom: 1px solid $color-border;
 }
 
-.education__inner {
-  padding: 44px 48px;
-}
-
-@media (min-width: 1024px) {
-  .education__inner {
-    padding: 56px 64px;
-  }
-}
-
-@media (max-width: 599px) {
-  .education__inner {
-    padding: 36px 24px;
-  }
-}
+// Section-level padding lives in the shared .section-inner utility
+// (app.scss) — the inner div uses that class directly instead of a local
+// education__inner copy of the same values.
 
 .education__list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 30px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;

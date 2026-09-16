@@ -1,5 +1,8 @@
 <template>
-  <div class="section-heading" :class="{ 'section-heading--center': center }">
+  <div
+    class="section-heading"
+    :class="{ 'section-heading--center': center, 'section-heading--compact': compact }"
+  >
     <p v-if="eyebrow" class="section-heading__eyebrow">{{ eyebrow }}</p>
     <h2 :id="headingId" class="section-heading__title">{{ title }}</h2>
     <p v-if="lede" class="section-heading__lede">{{ lede }}</p>
@@ -14,8 +17,12 @@ withDefaults(
     lede?: string;
     headingId?: string;
     center?: boolean;
+    // Opt-in smaller title scale for the main content sections (Engineering
+    // Highlights, Featured Experience, Work Experience) — About, Education
+    // and Contact keep the default scale untouched.
+    compact?: boolean;
   }>(),
-  { center: false },
+  { center: false, compact: false },
 );
 </script>
 
@@ -51,6 +58,13 @@ withDefaults(
   margin: 0;
 }
 
+// ~15% smaller than the default scale so these headings read as premium
+// editorial section titles rather than hero-sized text (final -1px micro
+// pass on top of that).
+.section-heading--compact .section-heading__title {
+  font-size: clamp(1.6875rem, 2.5vw, 2.0625rem);
+}
+
 .section-heading__lede {
   margin: 10px 0 0;
   color: $color-ink-secondary;
@@ -68,6 +82,10 @@ withDefaults(
   .section-heading__title {
     font-size: clamp(1.5rem, 6.7vw, 2rem);
     letter-spacing: -0.02em;
+  }
+
+  .section-heading--compact .section-heading__title {
+    font-size: clamp(1.25rem, 5.5vw, 1.6875rem);
   }
 }
 </style>

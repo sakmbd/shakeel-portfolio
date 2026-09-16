@@ -1,6 +1,6 @@
 <template>
   <section id="skills" class="skills" aria-labelledby="skills-heading">
-    <div class="skills__inner">
+    <div class="section-inner">
       <!-- ---------- HEADER ---------- -->
       <header class="skills__header">
         <div class="skills__eyebrow-row">
@@ -30,38 +30,46 @@
         </template>
       </div>
 
-      <!-- ---------- GRID ---------- -->
-      <div class="skills__grid">
-        <article v-for="(group, i) in resume.skills" :key="group.category" class="skills__card">
-          <header class="skills__card-header">
-            <span class="skills__card-icon">
-              <q-icon :name="iconFor(group.category)" size="18px" />
-            </span>
-            <h3 class="skills__card-title">{{ group.category }}</h3>
-            <span class="skills__card-num">{{ pad(i + 1) }}</span>
-          </header>
+      <!-- ---------- DETAILED STACK (collapsible) ---------- -->
+      <AccordionSection
+        label="Detailed Technology Stack"
+        :subtitle="`${resume.skills.length} categories — languages, backend, cloud, testing & more`"
+        panel-id="skills-detailed-panel"
+        class="skills__accordion"
+      >
+        <div class="skills__grid">
+          <article v-for="(group, i) in resume.skills" :key="group.category" class="skills__card">
+            <header class="skills__card-header">
+              <span class="skills__card-icon">
+                <q-icon :name="iconFor(group.category)" size="18px" />
+              </span>
+              <h3 class="skills__card-title">{{ group.category }}</h3>
+              <span class="skills__card-num">{{ pad(i + 1) }}</span>
+            </header>
 
-          <ul class="skills__card-chips">
-            <li v-for="item in group.items" :key="item">{{ item }}</li>
-          </ul>
-        </article>
+            <ul class="skills__card-chips">
+              <li v-for="item in group.items" :key="item">{{ item }}</li>
+            </ul>
+          </article>
 
-        <!-- Quote card — closes the grid rhythmically -->
-        <div class="skills__quote">
-          <span class="skills__quote-rule" aria-hidden="true"></span>
-          <p class="skills__quote-text">
-            Always learning.<br />
-            Always building what&rsquo;s next.
-          </p>
-          <span class="skills__quote-dots" aria-hidden="true"></span>
+          <!-- Quote card — closes the grid rhythmically -->
+          <div class="skills__quote">
+            <span class="skills__quote-rule" aria-hidden="true"></span>
+            <p class="skills__quote-text">
+              Always learning.<br />
+              Always building what&rsquo;s next.
+            </p>
+            <span class="skills__quote-dots" aria-hidden="true"></span>
+          </div>
         </div>
-      </div>
+      </AccordionSection>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { resume } from '@/data/resume';
+import AccordionSection from '@/components/ui/AccordionSection.vue';
 
 function pad(n: number): string {
   return String(n).padStart(2, '0');
@@ -93,6 +101,7 @@ function iconFor(category: string): string {
 $sk-bg: #faf7f3;
 $sk-surface: #ffffff;
 $sk-border: #ede8e1;
+$sk-border-strong: #ddd6cc;
 $sk-accent: #e05a2b;
 $sk-accent-soft: #fcece2;
 $sk-ink: #191817;
@@ -103,26 +112,15 @@ $sk-chip-ink: #2b2f36;
 $sk-num: #c7c2bb;
 
 /* ---------- SECTION ---------- */
+// Every other major section (About, Highlights, Featured, Experience,
+// Education) carries this same divider — Skills was the one section
+// missing it, which is why the Technology Stack -> Engineering Highlights
+// boundary read as an undifferentiated gap instead of a bounded section.
+// Section-level padding itself now lives entirely in the shared
+// .section-inner utility (app.scss) — the inner div uses that class
+// directly rather than a local skills__inner copy of the same values.
 .skills {
-  padding: 44px 0;
-}
-
-@media (min-width: 1024px) {
-  .skills {
-    padding: 56px 0;
-  }
-}
-
-.skills__inner {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding-inline: 24px;
-}
-
-@media (min-width: 1024px) {
-  .skills__inner {
-    padding-inline: 48px;
-  }
+  border-bottom: 1px solid $color-border;
 }
 
 /* ---------- HEADER ---------- */
@@ -154,10 +152,13 @@ $sk-num: #c7c2bb;
   border-radius: 2px;
 }
 
+// ~15% smaller than the previous scale — matches the reduced size applied
+// to the other main content section headings (Engineering Highlights,
+// Featured Experience, Work Experience) via SectionHeading's `compact` mode.
 .skills__title {
   font-family: $font-serif;
   font-weight: 500;
-  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-size: clamp(1.6875rem, 2.5vw, 2.0625rem);
   line-height: 1;
   letter-spacing: -0.035em;
   color: $sk-ink;
@@ -204,6 +205,66 @@ $sk-num: #c7c2bb;
   border-radius: 50%;
   background: $sk-accent;
   flex-shrink: 0;
+}
+
+/* ---------- DETAILED STACK ACCORDION ---------- */
+// Reuses the shared AccordionSection behavior/markup but repaints it in the
+// Skills section's own local palette (see tokens above) instead of the
+// site-wide $color-* tokens the component defaults to.
+.skills__accordion {
+  :deep(.qc-accordion) {
+    margin-top: 0;
+  }
+
+  :deep(.qc-accordion__trigger) {
+    padding: 20px 22px;
+    border: 1px solid $sk-border;
+    border-radius: 14px;
+    background: $sk-surface;
+
+    // Barely perceptible hover — a whisper-light wash (2% of $sk-ink), not
+    // a solid off-white fill.
+    &:hover {
+      background: rgba(25, 24, 23, 0.02);
+      border-color: $sk-border-strong;
+    }
+
+    &:focus-visible {
+      outline-color: $sk-accent;
+    }
+  }
+
+  :deep(.qc-accordion__label) {
+    font-family: $font-sans;
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $sk-ink;
+  }
+
+  :deep(.qc-accordion__subtitle) {
+    font-family: $font-sans;
+    color: $sk-ink-muted;
+  }
+
+  :deep(.qc-accordion__icon) {
+    border-color: $sk-border;
+    color: $sk-accent;
+  }
+
+  // Open state reads as "this is on" — neutral off-white, not an
+  // accent-highlighted card.
+  :deep(.qc-accordion.is-open .qc-accordion__trigger) {
+    border-color: $sk-border-strong;
+    background: $sk-bg;
+  }
+
+  :deep(.qc-accordion.is-open .qc-accordion__icon) {
+    border-color: $sk-border-strong;
+    background: $sk-surface;
+    color: $sk-ink-muted;
+  }
 }
 
 /* ---------- GRID ---------- */
@@ -360,15 +421,11 @@ $sk-num: #c7c2bb;
 
 /* ---------- MOBILE TWEAKS ---------- */
 @media (max-width: 599px) {
-  .skills {
-    padding: 36px 0;
-  }
-
   // The base clamp's min bound doesn't yield to the preferred vw value at
   // phone widths, so "Technology Stack" sat flat at a size wide enough to
   // wrap. Scale it down further here; unaffected above 599px.
   .skills__title {
-    font-size: clamp(1.5rem, 6.7vw, 2rem);
+    font-size: clamp(1.25rem, 5.5vw, 1.6875rem);
     margin-bottom: 18px;
   }
 

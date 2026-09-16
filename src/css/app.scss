@@ -49,6 +49,21 @@ body {
   }
 }
 
+// Single source of truth for the section-level padding shared by the major
+// content sections (Technology Stack, Engineering Highlights, Featured
+// Experience, Work Experience, Education). Global/unscoped so every section
+// component can apply it directly instead of each maintaining its own copy
+// of the same padding values.
+.section-inner {
+  padding: 10px 45px;
+}
+
+@media (max-width: 599px) {
+  .section-inner {
+    padding: 10px 24px;
+  }
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

@@ -1,11 +1,12 @@
 <template>
   <section id="experience" class="experience" aria-labelledby="experience-heading">
-    <div class="experience__inner">
+    <div class="section-inner">
       <SectionHeading
         eyebrow="Experience"
         title="Work experience"
         lede="Ten years across e-commerce, healthcare, network automation, and government platforms."
         heading-id="experience-heading"
+        compact
       />
 
       <ol class="experience__list">
@@ -32,25 +33,13 @@ import TimelineItem from '@/components/sections/TimelineItem.vue';
   border-bottom: 1px solid $color-border;
 }
 
-.experience__inner {
-  padding: 44px 48px;
-}
+// Section-level padding lives in the shared .section-inner utility
+// (app.scss) — the inner div uses that class directly instead of a local
+// experience__inner copy of the same values.
 
 .experience__list {
   list-style: none;
   margin: 0;
-  padding: 0;
-}
-
-@media (min-width: 1024px) {
-  .experience__inner {
-    padding: 56px 64px;
-  }
-}
-
-@media (max-width: 599px) {
-  .experience__inner {
-    padding: 36px 24px;
-  }
+  padding: 0 0 30px;
 }
 </style>
