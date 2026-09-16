@@ -29,7 +29,6 @@ withDefaults(
 <style lang="scss" scoped>
 .section-heading {
   margin-bottom: 28px;
-  max-width: $prose-max-width;
 }
 
 .section-heading--center {

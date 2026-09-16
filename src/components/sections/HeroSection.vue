@@ -9,7 +9,11 @@
 
       <p class="hero__title">{{ identity.title }}</p>
 
-      <p class="hero__summary">{{ resume.summary[0] }}</p>
+      <p class="hero__summary">
+        Senior Full Stack Developer with 10+ years of experience building scalable web applications,
+        specializing in Vue.js with hands-on experience in React.js, Node.js, TypeScript, REST APIs,
+        and GraphQL, alongside microservices, API architecture, and database optimization.
+      </p>
 
       <ul class="hero__facts">
         <li>10+ Years Experience</li>
@@ -20,9 +24,7 @@
       <div class="hero__bottom">
         <div class="hero__actions">
           <a class="btn btn--primary" :href="siteConfig.resumePdfPath" download>Download Resume</a>
-          <a class="btn btn--outline-dark" href="#contact" @click="onContactClick"
-            >Contact Me</a
-          >
+          <a class="btn btn--outline-dark" href="#contact" @click="onContactClick">Contact Me</a>
         </div>
 
         <div class="hero__social" aria-label="Social and contact links">
@@ -119,12 +121,15 @@ function onContactClick(e: MouseEvent) {
   margin: 0 0 16px;
 }
 
+// No max-width — the summary fills .hero__inner's own content width, same
+// as .hero__title and every other Hero element. It previously capped at
+// $prose-max-width (or an approximated calc() on desktop), which is why it
+// fell short of the right edge the other sections' content reaches.
 .hero__summary {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-style: italic;
   line-height: 1.65;
   color: $color-hero-ink-secondary;
-  max-width: $prose-max-width;
   margin: 0 0 24px;
   text-align: justify;
   text-align-last: left;
@@ -134,12 +139,6 @@ function onContactClick(e: MouseEvent) {
 @media (min-width: 1024px) {
   .hero__title {
     white-space: nowrap;
-  }
-
-  // Right-aligns approximately with About's text column, which starts after
-  // the photo column + gap (see $about-photo-col/$about-photo-gap).
-  .hero__summary {
-    max-width: calc(#{$about-photo-col} + #{$about-photo-gap} + #{$prose-max-width});
   }
 }
 

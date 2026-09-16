@@ -82,3 +82,11 @@ $prose-max-width: 700px;
 // right-align with About's text column instead of duplicating magic numbers.
 $about-photo-col: 300px;
 $about-photo-gap: 64px;
+
+// Shared horizontal content inset — the single source of truth for where
+// section content starts/ends. Used by the major sections' .section-inner
+// utility (app.scss), About (which needs its own vertical rhythm so can't
+// use .section-inner wholesale), and the sticky header, so all of them line
+// up on the same left/right edge instead of each picking its own padding.
+$section-inner-x: 45px;
+$section-inner-x-mobile: 24px;

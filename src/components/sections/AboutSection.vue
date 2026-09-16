@@ -79,8 +79,13 @@ const readMoreOpen = ref(false);
   border-bottom: 1px solid $color-border;
 }
 
+// Horizontal padding uses the shared $section-inner-x token (same one
+// .section-inner uses) so About's left/right content edges line up exactly
+// with Technology Stack, Highlights, Featured Experience, Work Experience,
+// and Education below it. Vertical padding stays About's own — it isn't
+// part of the compact-section rhythm those sections share via .section-inner.
 .about__inner {
-  padding: 44px 48px;
+  padding: 44px $section-inner-x;
   display: grid;
   gap: 40px;
   align-items: start;
@@ -88,13 +93,13 @@ const readMoreOpen = ref(false);
 
 @media (min-width: 1024px) {
   .about__inner {
-    padding: 64px;
+    padding: 64px $section-inner-x;
   }
 }
 
 @media (max-width: 599px) {
   .about__inner {
-    padding: 36px 24px;
+    padding: 36px $section-inner-x-mobile;
   }
 }
 
@@ -225,7 +230,6 @@ const readMoreOpen = ref(false);
   color: $color-ink-secondary;
   line-height: 1.75;
   font-size: 1.125rem;
-  max-width: $prose-max-width;
   margin: 0 0 22px;
   text-align: justify;
   text-align-last: left;

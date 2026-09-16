@@ -167,14 +167,31 @@ onUnmounted(() => {
   border-bottom: 1px solid $color-border;
 }
 
+// Horizontal padding uses the same $section-inner-x token as
+// .section-inner and About, so the brand/nav content lines up with the main
+// sections' left/right content edges. Vertical padding stays the header's
+// own compact bar height, unrelated to section rhythm.
 .site-header__inner {
   max-width: $card-max-width;
   width: calc(100% - 40px);
   margin: 0 auto;
-  padding: 16px 24px;
+  padding: 16px $section-inner-x;
   display: flex;
   align-items: center;
   gap: 28px;
+}
+
+// Mirrors .profile-card's own mobile override (which goes edge-to-edge at
+// this breakpoint) so the header bar's content inset matches the sections'
+// — without it, the calc(100% - 40px)/margin:auto centering above would add
+// an extra ~20px inset on top of the padding, misaligning the header from
+// About/the sections at phone widths.
+@media (max-width: 599px) {
+  .site-header__inner {
+    width: 100%;
+    margin: 0;
+    padding: 16px $section-inner-x-mobile;
+  }
 }
 
 .site-header__brand {
