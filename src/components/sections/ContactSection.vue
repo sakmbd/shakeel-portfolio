@@ -1,6 +1,12 @@
 <template>
   <section id="contact" class="contact" aria-labelledby="contact-heading">
-    <div class="contact__inner">
+    <motion.div
+      class="contact__inner"
+      initial="hidden"
+      while-in-view="visible"
+      :in-view-options="IN_VIEW_ONCE"
+      :variants="fadeUpVariants"
+    >
       <SectionHeading
         eyebrow="Contact"
         title="Let's talk"
@@ -10,10 +16,22 @@
       />
 
       <div class="contact__primary">
-        <a class="btn btn--primary" :href="`mailto:${identity.email}`">Email {{ identity.email }}</a>
-        <button type="button" class="btn btn--outline" @click="copyEmail">
+        <motion.a
+          class="btn btn--primary"
+          :href="`mailto:${identity.email}`"
+          :while-hover="{ y: -2 }"
+          :while-press="{ y: 0, scale: 0.98 }"
+          >Email {{ identity.email }}</motion.a
+        >
+        <motion.button
+          type="button"
+          class="btn btn--outline"
+          :while-hover="{ y: -2 }"
+          :while-press="{ y: 0, scale: 0.98 }"
+          @click="copyEmail"
+        >
           {{ copied ? 'Copied!' : 'Copy email' }}
-        </button>
+        </motion.button>
       </div>
 
       <ul class="contact__links">
@@ -28,24 +46,29 @@
           </a>
         </li>
         <li>
-          <a :href="siteConfig.resumePdfPath" download><q-icon name="description" size="18px" /> Resume (PDF)</a>
+          <a :href="siteConfig.resumePdfPath" download
+            ><q-icon name="description" size="18px" /> Resume (PDF)</a
+          >
         </li>
       </ul>
 
       <p class="contact__meta">
-        {{ identity.location }} &middot; {{ identity.relocation }} &middot; {{ identity.availability }}
+        {{ identity.location }} &middot; {{ identity.relocation }} &middot;
+        {{ identity.availability }}
       </p>
-    </div>
+    </motion.div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { motion } from 'motion-v';
 import { resume } from '@/data/resume';
 import { siteConfig } from '@/config/site.config';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
 import IconGitHub from '@/components/icons/IconGitHub.vue';
 import IconLinkedIn from '@/components/icons/IconLinkedIn.vue';
+import { fadeUpVariants, IN_VIEW_ONCE } from '@/composables/useMotionPresets';
 
 const identity = resume.identity;
 const copied = ref(false);
@@ -98,9 +121,20 @@ async function copyEmail() {
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9375rem;
+    transition: color var(--duration-fast) var(--ease-premium);
+
+    svg,
+    .q-icon {
+      transition: transform var(--duration-fast) var(--ease-premium);
+    }
 
     &:hover {
       color: $color-accent-text;
+
+      svg,
+      .q-icon {
+        transform: translateY(-2px);
+      }
     }
   }
 }

@@ -1,30 +1,54 @@
 <template>
   <section id="education" class="education" aria-labelledby="education-heading">
     <div class="section-inner">
-      <SectionHeading
-        title="Education"
-        lede="Academic background and qualifications."
-        heading-id="education-heading"
-      />
+      <motion.div
+        initial="hidden"
+        while-in-view="visible"
+        :in-view-options="IN_VIEW_ONCE"
+        :variants="fadeUpVariants"
+      >
+        <SectionHeading
+          title="Education"
+          lede="Academic background and qualifications."
+          heading-id="education-heading"
+        />
+      </motion.div>
 
-      <ul class="education__list">
-        <li
+      <motion.ul
+        class="education__list"
+        initial="hidden"
+        while-in-view="visible"
+        :in-view-options="IN_VIEW_ONCE"
+        :variants="staggerContainerVariants(0.09)"
+      >
+        <motion.li
           v-for="(entry, i) in resume.education"
           :key="entry.name"
           class="education__item"
           :class="{ 'education__item--lead': i === 0 }"
+          :variants="fadeUpItemVariants()"
+          :while-hover="{ y: -3 }"
+          :transition="{ duration: 0.2, ease: EASE_PREMIUM }"
         >
           <h3 class="education__name">{{ entry.name }}</h3>
           <p class="education__description">{{ entry.description }}</p>
-        </li>
-      </ul>
+        </motion.li>
+      </motion.ul>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { motion } from 'motion-v';
 import { resume } from '@/data/resume';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
+import {
+  fadeUpVariants,
+  fadeUpItemVariants,
+  staggerContainerVariants,
+  IN_VIEW_ONCE,
+  EASE_PREMIUM,
+} from '@/composables/useMotionPresets';
 </script>
 
 <style lang="scss" scoped>
@@ -68,6 +92,12 @@ import SectionHeading from '@/components/ui/SectionHeading.vue';
   border-left: 3px solid $color-border-strong;
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
+  transition: box-shadow var(--duration-fast) var(--ease-premium);
+
+  // The lift itself is now driven by motion-v's `whileHover` (see template).
+  &:hover {
+    box-shadow: $shadow-md;
+  }
 }
 
 .education__item--lead {

@@ -1,5 +1,19 @@
 // app global css
 
+// Shared motion language — every animation added across the site (hover
+// lifts, scroll reveals, Hero entrance, accordion/timeline polish) draws
+// from these same tokens instead of picking its own easing/duration/
+// distance, so the motion reads as one system rather than a per-section
+// grab-bag of effects.
+:root {
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1); // smooth deceleration, no bounce/overshoot
+  --duration-fast: 0.2s; // hover/focus micro-interactions
+  --duration-base: 0.4s; // small stagger steps (heading parts, hero lines)
+  --duration-slow: 0.6s; // scroll-triggered section/card reveals
+  --motion-distance-sm: 10px; // inline text stagger (headings, hero lines)
+  --motion-distance-md: 18px; // section/card scroll-reveal travel
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -31,7 +45,9 @@ body {
 // contains Hero/About/Experience/Contact, floating on the cool page background.
 .profile-card {
   max-width: $card-max-width;
-  width: calc(100% - 40px); // guarantees a minimum 20px gutter on any viewport above the mobile breakpoint
+  width: calc(
+    100% - 40px
+  ); // guarantees a minimum 20px gutter on any viewport above the mobile breakpoint
   margin: 28px auto;
   background: $color-surface;
   border: 1px solid $color-border;
@@ -80,17 +96,15 @@ body {
   cursor: pointer;
   border: 1px solid transparent;
   transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease,
-    box-shadow 0.15s ease,
-    transform 0.15s ease;
-
-  &:active {
-    transform: translateY(1px);
-  }
+    background-color var(--duration-fast) var(--ease-premium),
+    border-color var(--duration-fast) var(--ease-premium),
+    color var(--duration-fast) var(--ease-premium),
+    box-shadow var(--duration-fast) var(--ease-premium);
 }
 
+// The lift/press feedback is driven by motion-v's `whileHover`/`whilePress`
+// on each `.btn` usage (see HeroSection.vue and ContactSection.vue) — this
+// stays CSS-only for color/background/border/shadow.
 .btn--primary {
   background: $color-accent;
   color: #fff;
@@ -101,12 +115,6 @@ body {
     background: $color-accent-hover;
     border-color: $color-accent-hover;
     box-shadow: $shadow-btn-hover;
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
-    box-shadow: $shadow-btn;
   }
 }
 
@@ -176,6 +184,15 @@ a {
   }
 }
 
+// Scroll-reveal and stagger are now handled by motion-v's `whileInView` /
+// `variants` (see src/composables/useMotionPresets.ts and each section
+// component) instead of a custom IntersectionObserver directive + CSS
+// transition — this global block is the one remaining site-wide safety net:
+// it collapses any plain CSS transition (hover states, the accordion panel,
+// etc.) to near-instant when the user has reduced motion enabled. motion-v
+// itself is separately configured (see App.vue's `<MotionConfig
+// reducedMotion="user">`) to respect the same preference for everything it
+// animates.
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

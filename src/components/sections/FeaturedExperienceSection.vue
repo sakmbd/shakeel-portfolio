@@ -1,6 +1,12 @@
 <template>
   <section id="featured-experience" class="featured" aria-labelledby="featured-heading">
-    <div class="section-inner">
+    <motion.div
+      class="section-inner"
+      initial="hidden"
+      while-in-view="visible"
+      :in-view-options="IN_VIEW_ONCE"
+      :variants="fadeUpVariants"
+    >
       <SectionHeading
         title="Featured Engineering Experience"
         lede="A closer look at four of the more technically interesting problems from the timeline below."
@@ -14,12 +20,14 @@
         panel-id="featured-experience-panel"
       >
         <div class="featured__layout">
-          <article
+          <motion.article
             v-for="entry in resume.featuredExperience"
             :id="entry.slug"
             :key="entry.slug"
             class="featured__card"
             :class="{ 'featured__card--lead': entry.featured }"
+            :while-hover="{ y: -3 }"
+            :transition="{ duration: 0.2, ease: EASE_PREMIUM }"
           >
             <div class="featured__card-head">
               <h3 class="featured__title">{{ entry.title }}</h3>
@@ -38,22 +46,23 @@
                 <li v-for="tech in entry.technologies" :key="tech">{{ tech }}</li>
               </ul>
             </div>
-          </article>
+          </motion.article>
         </div>
       </AccordionSection>
-    </div>
+    </motion.div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { motion } from 'motion-v';
 import { resume } from '@/data/resume';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
 import AccordionSection from '@/components/ui/AccordionSection.vue';
+import { fadeUpVariants, IN_VIEW_ONCE, EASE_PREMIUM } from '@/composables/useMotionPresets';
 
 const accordionLabel = computed(
-  () =>
-    `${String(resume.featuredExperience.length).padStart(2, '0')} Engineering Case Studies`,
+  () => `${String(resume.featuredExperience.length).padStart(2, '0')} Engineering Case Studies`,
 );
 const accordionSubtitle = computed(() =>
   resume.featuredExperience.map((entry) => entry.title).join(' • '),
@@ -100,6 +109,20 @@ const accordionSubtitle = computed(() =>
   border: 1px solid $color-border;
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
+  transition:
+    box-shadow var(--duration-fast) var(--ease-premium),
+    border-color var(--duration-fast) var(--ease-premium);
+
+  // The lift itself is now driven by motion-v's `whileHover` (see template).
+  // Only top/right/bottom firm up here on hover — .featured__card--lead's
+  // permanent accent border-left (below) must stay untouched, so this
+  // avoids the border-color shorthand rather than overriding it.
+  &:hover {
+    box-shadow: $shadow-md;
+    border-top-color: $color-border-strong;
+    border-right-color: $color-border-strong;
+    border-bottom-color: $color-border-strong;
+  }
 }
 
 .featured__card-head {

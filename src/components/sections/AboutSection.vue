@@ -1,6 +1,12 @@
 <template>
   <section id="about" class="about" aria-labelledby="about-heading">
-    <div class="about__inner">
+    <motion.div
+      class="about__inner"
+      initial="hidden"
+      while-in-view="visible"
+      :in-view-options="IN_VIEW_ONCE"
+      :variants="fadeUpVariants"
+    >
       <div class="about__profile">
         <div class="about__portrait">
           <img
@@ -57,14 +63,16 @@
           {{ readMoreOpen ? 'Read less' : 'Read more' }}
         </button>
       </div>
-    </div>
+    </motion.div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { motion } from 'motion-v';
 import { resume } from '@/data/resume';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
+import { fadeUpVariants, IN_VIEW_ONCE } from '@/composables/useMotionPresets';
 
 const identity = resume.identity;
 
@@ -260,7 +268,7 @@ const readMoreOpen = ref(false);
 .about__more {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.25s ease;
+  transition: grid-template-rows var(--duration-base) var(--ease-premium);
 
   &.is-open {
     grid-template-rows: 1fr;
@@ -284,6 +292,7 @@ const readMoreOpen = ref(false);
   font-weight: 700;
   color: $color-accent-text;
   cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-premium);
 
   &:hover {
     color: $color-accent-hover;

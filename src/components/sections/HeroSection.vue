@@ -5,7 +5,11 @@
 
       <p class="hero__eyebrow">Senior Software Engineer</p>
 
-      <h1 class="hero__name">{{ identity.name }}</h1>
+      <h1 class="hero__name">
+        <span class="visually-hidden">{{ identity.name }}</span>
+        <span class="hero__name-visible" aria-hidden="true">{{ visibleName }}</span
+        ><span v-if="showCaret" class="hero__caret" aria-hidden="true"></span>
+      </h1>
 
       <p class="hero__title">{{ identity.title }}</p>
 
@@ -23,8 +27,22 @@
 
       <div class="hero__bottom">
         <div class="hero__actions">
-          <a class="btn btn--primary" :href="siteConfig.resumePdfPath" download>Download Resume</a>
-          <a class="btn btn--outline-dark" href="#contact" @click="onContactClick">Contact Me</a>
+          <motion.a
+            class="btn btn--primary"
+            :href="siteConfig.resumePdfPath"
+            download
+            :while-hover="{ y: -2 }"
+            :while-press="{ y: 0, scale: 0.98 }"
+            >Download Resume</motion.a
+          >
+          <motion.a
+            class="btn btn--outline-dark"
+            href="#contact"
+            :while-hover="{ y: -2 }"
+            :while-press="{ y: 0, scale: 0.98 }"
+            @click="onContactClick"
+            >Contact Me</motion.a
+          >
         </div>
 
         <div class="hero__social" aria-label="Social and contact links">
@@ -49,6 +67,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { motion } from 'motion-v';
 import { resume } from '@/data/resume';
 import { siteConfig } from '@/config/site.config';
 import { scrollToSection } from '@/utils/scrollToSection';
@@ -57,6 +77,50 @@ import IconGitHub from '@/components/icons/IconGitHub.vue';
 import IconLinkedIn from '@/components/icons/IconLinkedIn.vue';
 
 const identity = resume.identity;
+
+// Character-by-character "typing" reveal, driven by plain Vue state rather
+// than a CSS animation-timing-function — this is the actual visual effect;
+// it cannot be silently neutralized by any CSS-level interference (a stray
+// global rule, an invalid steps() edge case, etc.) the way the previous
+// CSS-only implementation could be. The full name is still always real,
+// crawlable text via .visually-hidden (app.scss's standard sr-only
+// utility) — the animated span is aria-hidden so assistive tech reads the
+// name once, from the hidden element, never as a mid-typing fragment.
+const CHAR_INTERVAL_MS = 85; // 14 chars * 85ms ≈ 1.2s — within the ~1-1.5s target
+const CARET_HOLD_MS = 500; // brief hold after typing finishes, then the caret is removed
+
+const revealedCount = ref(0);
+const showCaret = ref(false);
+const visibleName = computed(() => identity.name.slice(0, revealedCount.value));
+
+let intervalId: ReturnType<typeof setInterval> | undefined;
+let caretTimeoutId: ReturnType<typeof setTimeout> | undefined;
+
+onMounted(() => {
+  // Reduced motion: show the complete name immediately, no timer, no caret.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    revealedCount.value = identity.name.length;
+    return;
+  }
+
+  showCaret.value = true;
+  intervalId = setInterval(() => {
+    revealedCount.value += 1;
+
+    if (revealedCount.value >= identity.name.length) {
+      clearInterval(intervalId);
+      intervalId = undefined;
+      caretTimeoutId = setTimeout(() => {
+        showCaret.value = false;
+      }, CARET_HOLD_MS);
+    }
+  }, CHAR_INTERVAL_MS);
+});
+
+onBeforeUnmount(() => {
+  clearInterval(intervalId);
+  clearTimeout(caretTimeoutId);
+});
 
 // Kept as a real #contact href for semantics/fallback, but the click is
 // intercepted so the URL stays clean (history-mode routing + SSG means a
@@ -101,6 +165,12 @@ function onContactClick(e: MouseEvent) {
   margin: 0 0 10px;
 }
 
+// First-load "typing" reveal: the name is always real, present text — see
+// .visually-hidden above (app.scss's standard sr-only utility) for the
+// crawlable/accessible copy, and the script's onMounted for the plain Vue
+// timer that progressively fills .hero__name-visible. Nothing here is a
+// CSS animation, so there's no animation-timing-function edge case that can
+// silently neutralize it.
 .hero__name {
   font-family: $font-serif;
   font-weight: 700;
@@ -110,6 +180,27 @@ function onContactClick(e: MouseEvent) {
   color: $color-hero-ink;
   margin: 0 0 14px;
   max-width: 16ch;
+}
+
+// Blinking terminal-style caret, only ever rendered (see v-if in the
+// template) while the script's timer is actively typing — reduced motion
+// never sets showCaret to true, so this element (and its animation) simply
+// never exists in that case, rather than needing its own CSS override.
+.hero__caret {
+  display: inline-block;
+  width: 3px;
+  height: 0.78em;
+  margin-left: 2px;
+  border-radius: 1px;
+  background: $color-hero-accent;
+  vertical-align: -0.05em;
+  animation: hero-caret-blink 1s step-end infinite;
+}
+
+@keyframes hero-caret-blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 .hero__title {

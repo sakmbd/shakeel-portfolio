@@ -1,6 +1,12 @@
 <template>
   <section id="highlights" class="highlights" aria-labelledby="highlights-heading">
-    <div class="section-inner">
+    <motion.div
+      class="section-inner"
+      initial="hidden"
+      while-in-view="visible"
+      :in-view-options="IN_VIEW_ONCE"
+      :variants="fadeUpVariants"
+    >
       <SectionHeading
         title="Engineering Highlights"
         lede="Selected outcomes from real production systems across e-commerce, healthcare, and network automation."
@@ -14,22 +20,30 @@
         panel-id="highlights-panel"
       >
         <ul class="highlights__grid">
-          <li v-for="item in resume.highlights" :key="item.stat" class="highlights__tile">
+          <motion.li
+            v-for="item in resume.highlights"
+            :key="item.stat"
+            class="highlights__tile"
+            :while-hover="{ y: -3 }"
+            :transition="{ duration: 0.2, ease: EASE_PREMIUM }"
+          >
             <q-icon :name="item.icon" size="22px" />
             <p class="highlights__stat">{{ item.stat }}</p>
             <p class="highlights__description">{{ item.description }}</p>
             <p class="highlights__employer">{{ item.employer }}</p>
-          </li>
+          </motion.li>
         </ul>
       </AccordionSection>
-    </div>
+    </motion.div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { motion } from 'motion-v';
 import { resume } from '@/data/resume';
 import SectionHeading from '@/components/ui/SectionHeading.vue';
 import AccordionSection from '@/components/ui/AccordionSection.vue';
+import { fadeUpVariants, IN_VIEW_ONCE, EASE_PREMIUM } from '@/composables/useMotionPresets';
 </script>
 
 <style lang="scss" scoped>
@@ -72,11 +86,27 @@ import AccordionSection from '@/components/ui/AccordionSection.vue';
   border-left: 3px solid $color-accent;
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
+  transition:
+    box-shadow var(--duration-fast) var(--ease-premium),
+    border-left-color var(--duration-fast) var(--ease-premium);
+
+  // The lift itself is now driven by motion-v's `whileHover` (see template).
+  // The accent spine deepens a shade and the icon lifts slightly — the
+  // existing accent responding, not a new highlight color being introduced.
+  &:hover {
+    box-shadow: $shadow-md;
+    border-left-color: $color-accent-hover;
+
+    .q-icon {
+      transform: translateY(-2px);
+    }
+  }
 
   .q-icon {
     display: block;
     color: $color-accent;
     margin-bottom: 14px;
+    transition: transform var(--duration-fast) var(--ease-premium);
   }
 }
 

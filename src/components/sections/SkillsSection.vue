@@ -1,22 +1,28 @@
 <template>
   <section id="skills" class="skills" aria-labelledby="skills-heading">
-    <div class="section-inner">
+    <motion.div
+      class="section-inner"
+      initial="hidden"
+      while-in-view="visible"
+      :in-view-options="IN_VIEW_ONCE"
+      :variants="fadeUpVariants"
+    >
       <!-- ---------- HEADER ---------- -->
-      <header class="skills__header">
-        <div class="skills__eyebrow-row">
+      <motion.header class="skills__header" :variants="staggerContainerVariants(0.08)">
+        <motion.div class="skills__eyebrow-row" :variants="fadeUpItemVariants()">
           <span class="skills__eyebrow">Skills</span>
           <span class="skills__eyebrow-rule" aria-hidden="true"></span>
-        </div>
+        </motion.div>
 
-        <h2 id="skills-heading" class="skills__title">
+        <motion.h2 id="skills-heading" class="skills__title" :variants="fadeUpItemVariants()">
           Technology <span class="skills__title-accent">Stack</span>
-        </h2>
+        </motion.h2>
 
-        <p class="skills__lede">
+        <motion.p class="skills__lede" :variants="fadeUpItemVariants()">
           The technologies behind 10+ years of full-stack delivery, from core languages to cloud,
           testing, and API tooling.
-        </p>
-      </header>
+        </motion.p>
+      </motion.header>
 
       <!-- ---------- CORE STACK STRIP ---------- -->
       <div class="skills__core-strip" aria-label="Core technology stack">
@@ -38,7 +44,13 @@
         class="skills__accordion"
       >
         <div class="skills__grid">
-          <article v-for="(group, i) in resume.skills" :key="group.category" class="skills__card">
+          <motion.article
+            v-for="(group, i) in resume.skills"
+            :key="group.category"
+            class="skills__card"
+            :while-hover="{ y: -3 }"
+            :transition="{ duration: 0.2, ease: EASE_PREMIUM }"
+          >
             <header class="skills__card-header">
               <span class="skills__card-icon">
                 <q-icon :name="iconFor(group.category)" size="18px" />
@@ -50,7 +62,7 @@
             <ul class="skills__card-chips">
               <li v-for="item in group.items" :key="item">{{ item }}</li>
             </ul>
-          </article>
+          </motion.article>
 
           <!-- Quote card — closes the grid rhythmically -->
           <div class="skills__quote">
@@ -63,13 +75,21 @@
           </div>
         </div>
       </AccordionSection>
-    </div>
+    </motion.div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { motion } from 'motion-v';
 import { resume } from '@/data/resume';
 import AccordionSection from '@/components/ui/AccordionSection.vue';
+import {
+  fadeUpVariants,
+  fadeUpItemVariants,
+  staggerContainerVariants,
+  IN_VIEW_ONCE,
+  EASE_PREMIUM,
+} from '@/composables/useMotionPresets';
 
 function pad(n: number): string {
   return String(n).padStart(2, '0');
@@ -297,15 +317,18 @@ $sk-num: #c7c2bb;
   flex-direction: column;
   gap: 18px;
   transition:
-    box-shadow 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s ease;
+    box-shadow var(--duration-fast) var(--ease-premium),
+    border-color var(--duration-fast) var(--ease-premium),
+    background-color var(--duration-fast) var(--ease-premium);
 }
 
+// The lift itself is now driven by motion-v's `whileHover` (see template) —
+// this stays CSS-only for color/shadow, which native :hover already
+// handles reliably.
 .skills__card:hover {
   border-color: rgba(224, 90, 43, 0.28);
+  background: rgba(224, 90, 43, 0.02);
   box-shadow: 0 10px 28px rgba(20, 18, 16, 0.06);
-  transform: translateY(-2px);
 }
 
 .skills__card-header {
@@ -325,6 +348,11 @@ $sk-num: #c7c2bb;
   background: $sk-accent-soft;
   color: $sk-accent;
   flex-shrink: 0;
+  transition: transform var(--duration-fast) var(--ease-premium);
+}
+
+.skills__card:hover .skills__card-icon {
+  transform: scale(1.08);
 }
 
 .skills__card-title {
@@ -365,8 +393,8 @@ $sk-num: #c7c2bb;
     padding: 6px 12px;
     line-height: 1.2;
     transition:
-      background-color 0.2s ease,
-      border-color 0.2s ease;
+      background-color var(--duration-fast) var(--ease-premium),
+      border-color var(--duration-fast) var(--ease-premium);
 
     &:hover {
       background: #e7ebef;

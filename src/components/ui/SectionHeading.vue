@@ -1,15 +1,25 @@
 <template>
-  <div
+  <motion.div
     class="section-heading"
     :class="{ 'section-heading--center': center, 'section-heading--compact': compact }"
+    :variants="staggerContainerVariants(0.08)"
   >
-    <p v-if="eyebrow" class="section-heading__eyebrow">{{ eyebrow }}</p>
-    <h2 :id="headingId" class="section-heading__title">{{ title }}</h2>
-    <p v-if="lede" class="section-heading__lede">{{ lede }}</p>
-  </div>
+    <motion.p v-if="eyebrow" class="section-heading__eyebrow" :variants="fadeUpItemVariants()">{{
+      eyebrow
+    }}</motion.p>
+    <motion.h2 :id="headingId" class="section-heading__title" :variants="fadeUpItemVariants()">{{
+      title
+    }}</motion.h2>
+    <motion.p v-if="lede" class="section-heading__lede" :variants="fadeUpItemVariants()">{{
+      lede
+    }}</motion.p>
+  </motion.div>
 </template>
 
 <script setup lang="ts">
+import { motion } from 'motion-v';
+import { fadeUpItemVariants, staggerContainerVariants } from '@/composables/useMotionPresets';
+
 withDefaults(
   defineProps<{
     eyebrow?: string;

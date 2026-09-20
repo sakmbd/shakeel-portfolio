@@ -1,10 +1,20 @@
 <template>
-  <li class="timeline-item">
+  <motion.li class="timeline-item" :variants="fadeUpItemVariants()">
     <div class="timeline-item__rail" aria-hidden="true">
-      <span class="timeline-item__dot" :class="{ 'timeline-item__dot--current': current }"></span>
+      <motion.span class="timeline-item__rail-line" :variants="railVariants"></motion.span>
+      <motion.span
+        class="timeline-item__dot"
+        :class="{ 'timeline-item__dot--current': current }"
+        :variants="dotVariants"
+      ></motion.span>
     </div>
 
-    <div class="timeline-item__card" :class="{ 'is-open': open, 'is-current': current }">
+    <motion.div
+      class="timeline-item__card"
+      :class="{ 'is-open': open, 'is-current': current }"
+      :while-hover="{ y: -3 }"
+      :transition="{ duration: 0.2, ease: EASE_PREMIUM }"
+    >
       <button
         type="button"
         class="timeline-item__trigger"
@@ -37,14 +47,16 @@
           </ul>
         </div>
       </div>
-    </div>
-  </li>
+    </motion.div>
+  </motion.li>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { motion } from 'motion-v';
 import type { ExperienceEntry } from '@/types/resume';
 import { calculateDurationLabel } from '@/utils/duration';
+import { fadeUpItemVariants, EASE_PREMIUM } from '@/composables/useMotionPresets';
 
 const props = withDefaults(
   defineProps<{
@@ -59,6 +71,19 @@ const props = withDefaults(
 const open = ref(props.defaultOpen);
 const panelId = computed(() => `timeline-panel-${props.index}`);
 const durationLabel = computed(() => calculateDurationLabel(props.entry.duration));
+
+// The rail "draws in" downward and the node pops in alongside the card,
+// inheriting the same hidden/visible state as this <li> from the parent
+// <motion.ol>'s stagger (see ExperienceTimelineSection.vue) — no separate
+// delay needed here, they're already part of that same per-item step.
+const railVariants = {
+  hidden: { scaleY: 0 },
+  visible: { scaleY: 1, transition: { duration: 0.5, ease: EASE_PREMIUM } },
+};
+const dotVariants = {
+  hidden: { scale: 0.4, opacity: 0 },
+  visible: { scale: 1, opacity: 1, transition: { duration: 0.4, ease: EASE_PREMIUM } },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -72,7 +97,7 @@ const durationLabel = computed(() => calculateDurationLabel(props.entry.duration
   &:last-child {
     padding-bottom: 0;
 
-    .timeline-item__rail::before {
+    .timeline-item__rail-line {
       display: none;
     }
   }
@@ -82,15 +107,19 @@ const durationLabel = computed(() => calculateDurationLabel(props.entry.duration
   position: relative;
   display: flex;
   justify-content: center;
+}
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 24px;
-    bottom: -24px;
-    width: 1px;
-    background: $color-border-strong;
-  }
+// A real element (not a ::before) so motion-v's `variants` can animate it —
+// Motion animates DOM elements directly, not pseudo-elements. Same
+// position/size as the old pseudo-element line; transform-origin: top makes
+// its scaleY(0 -> 1) reveal read as the rail "drawing in" downward.
+.timeline-item__rail-line {
+  position: absolute;
+  top: 24px;
+  bottom: -24px;
+  width: 1px;
+  background: $color-border-strong;
+  transform-origin: top;
 }
 
 .timeline-item__dot {
@@ -115,11 +144,24 @@ const durationLabel = computed(() => calculateDurationLabel(props.entry.duration
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
   overflow: hidden;
-  transition: border-left-color 0.15s ease;
+  transition:
+    border-color var(--duration-fast) var(--ease-premium),
+    box-shadow var(--duration-fast) var(--ease-premium);
 
   &.is-current,
   &.is-open {
     border-left-color: $color-accent;
+  }
+
+  // The lift itself is now driven by motion-v's `whileHover` (see template).
+  // Only top/right/bottom firm up here on hover — border-left-color is
+  // driven separately by .is-current/.is-open above and must stay untouched,
+  // so this avoids the border-color shorthand.
+  &:hover {
+    box-shadow: $shadow-md;
+    border-top-color: $color-border-strong;
+    border-right-color: $color-border-strong;
+    border-bottom-color: $color-border-strong;
   }
 }
 
@@ -166,7 +208,7 @@ const durationLabel = computed(() => calculateDurationLabel(props.entry.duration
   line-height: 1.25;
   color: $color-ink;
   margin: 0;
-  transition: color 0.15s ease;
+  transition: color var(--duration-fast) var(--ease-premium);
 }
 
 .timeline-item__badge {
@@ -201,17 +243,21 @@ const durationLabel = computed(() => calculateDurationLabel(props.entry.duration
   right: 20px;
   color: $color-muted;
   display: inline-flex;
-  transition: transform 0.2s ease;
+  transition: transform var(--duration-fast) var(--ease-premium);
 
   &.is-open {
     transform: rotate(180deg);
   }
 }
 
+.timeline-item__trigger:hover .timeline-item__chevron {
+  color: $color-accent;
+}
+
 .timeline-item__panel {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.25s ease;
+  transition: grid-template-rows var(--duration-base) var(--ease-premium);
 
   &.is-open {
     grid-template-rows: 1fr;
@@ -220,6 +266,13 @@ const durationLabel = computed(() => calculateDurationLabel(props.entry.duration
 
 .timeline-item__panel-inner {
   overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-premium);
+}
+
+.timeline-item__panel.is-open .timeline-item__panel-inner {
+  opacity: 1;
+  transition-delay: 0.05s;
 }
 
 .timeline-item__achievements {

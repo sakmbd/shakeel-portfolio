@@ -17,16 +17,29 @@
       </span>
     </button>
 
-    <div class="qc-accordion__panel" :class="{ 'is-open': open }">
-      <div :id="panelId" class="qc-accordion__panel-inner">
+    <motion.div
+      class="qc-accordion__panel"
+      :initial="false"
+      :animate="{ height: open ? 'auto' : 0 }"
+      :transition="{ duration: 0.35, ease: EASE_PREMIUM }"
+    >
+      <motion.div
+        :id="panelId"
+        class="qc-accordion__panel-inner"
+        :initial="false"
+        :animate="{ opacity: open ? 1 : 0 }"
+        :transition="{ duration: 0.2, ease: EASE_PREMIUM, delay: open ? 0.08 : 0 }"
+      >
         <slot />
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { motion } from 'motion-v';
+import { EASE_PREMIUM } from '@/composables/useMotionPresets';
 
 const props = withDefaults(
   defineProps<{
@@ -68,17 +81,20 @@ const open = ref(props.defaultOpen);
   text-align: left;
   font-family: inherit;
   transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color var(--duration-fast) var(--ease-premium),
+    background-color var(--duration-fast) var(--ease-premium),
+    box-shadow var(--duration-fast) var(--ease-premium),
+    transform var(--duration-fast) var(--ease-premium);
 
   // Hover is barely perceptible — a whisper-light neutral wash (2% of
-  // $color-ink, not a solid fill) plus a slightly firmer border. The trigger
-  // is a secondary control and must never compete with the section heading
-  // or the cards it reveals.
+  // $color-ink, not a solid fill) plus a slightly firmer border and a
+  // hairline lift. The trigger is a secondary control and must never
+  // compete with the section heading or the cards it reveals.
   &:hover {
     background: rgba(17, 24, 39, 0.02);
     border-color: $color-border-strong;
+    box-shadow: $shadow-md;
+    transform: translateY(-1px);
   }
 
   &:focus-visible {
@@ -120,8 +136,13 @@ const open = ref(props.defaultOpen);
   border: 1px solid $color-border-strong;
   color: $color-accent-text;
   transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease;
+    border-color var(--duration-fast) var(--ease-premium),
+    background-color var(--duration-fast) var(--ease-premium),
+    transform var(--duration-fast) var(--ease-premium);
+}
+
+.qc-accordion__trigger:hover .qc-accordion__icon {
+  transform: scale(1.06);
 }
 
 .qc-accordion__icon-bar {
@@ -141,7 +162,7 @@ const open = ref(props.defaultOpen);
 .qc-accordion__icon-bar--v {
   width: 2px;
   height: 13px;
-  transition: transform 0.25s ease;
+  transition: transform var(--duration-fast) var(--ease-premium);
 }
 
 // "Open" only needs to read as "this is on" — a neutral off-white/grey, not
@@ -163,21 +184,14 @@ const open = ref(props.defaultOpen);
   }
 }
 
-// Height transition via grid-template-rows (0fr collapsed -> 1fr expanded)
-// so the collapse/expand animates smoothly without measuring pixel heights.
-// The inner wrapper clips overflow during the transition.
+// Height (0 <-> 'auto') and content opacity are animated by motion-v (see
+// template) rather than a CSS grid-rows trick — `overflow: hidden` still
+// clips the content while the panel's real height is animating.
 .qc-accordion__panel {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s ease;
-}
-
-.qc-accordion__panel.is-open {
-  grid-template-rows: 1fr;
+  overflow: hidden;
 }
 
 .qc-accordion__panel-inner {
-  overflow: hidden;
   padding-top: 24px;
 }
 </style>
