@@ -294,7 +294,7 @@ export const resume: ResumeData = {
 
   education: [
     {
-      name: 'AMIETE — Equivalent to B.E./B.Tech. (CS&E)',
+      name: 'AMIETE — Eqv. to B.E./B.Tech. (CS&E)',
       description: "4-Year's Degree in Computer Science & Engineering — IETE, New Delhi, 2014",
     },
     {
